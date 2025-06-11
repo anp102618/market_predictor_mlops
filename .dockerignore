@@ -1,0 +1,46 @@
+# Python cache and virtual env
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.env
+.venv/
+venv/
+
+# Logs
+logs/
+*.log
+
+# DVC cache and metadata
+.dvc/
+.dvcignore
+.dvc/cache/
+.dvc/tmp/
+.dvc/stage.dvc
+
+# Jupyter/Notebook artifacts
+.ipynb_checkpoints/
+*.ipynb
+
+# OS & editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Large data/artifacts (if not needed inside container)
+Data/raw_data/
+Data/processed_data/
+Tuned_Model/
+*.joblib
+*.pkl
+*.csv
+*.yaml
+
+# Git
+.git/
+.gitignore
+
+

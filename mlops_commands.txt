@@ -1,0 +1,38 @@
+#start with :
+
+git init
+dvc init
+git commit -m "Initialized Git and DVC"
+git clone
+mkdir -p dvc_storage
+dvc remote add -d local_remote ./dvc_storage
+git add .
+git commit -m "Track with DVC"
+git push origin main
+
+
+# after docker image uploaded to dockerhub :
+
+docker pull ap102618/stock_prediction_app:latest
+docker run -d -p 8000:8000 ap102618/stock_prediction_app:latest
+
+#Now, go to: http://localhost:8000    
+check endpoints 
+
+# prometheus and grafana:
+docker run -p 9090:9090 prom/prometheus
+docker run -p 9090:9090 -v "D:/STOCK_PREDICTION/prometheus:/etc/prometheus" prom/prometheus
+docker run -d -p 3000:3000 grafana/grafana
+localhost:9090/targets
+localhost:9090/graph
+localhost:3000
+
+# After your pipeline
+        run_dvc_command("dvc add Data/processed_data/final_data.csv")
+        run_dvc_command("dvc add Tuned_Model/model.joblib")
+        run_dvc_command("dvc add Tuned_Model/mlflow_details.yaml")
+        run_dvc_command("dvc add Tuned_Model/time_series_predictions.yaml")
+
+        run_dvc_command("git add .")
+        run_dvc_command("git commit -m 'Auto: Tracked artifacts with DVC'")
+        run_dvc_command("dvc push")  # Will push to local remote ~/dvc_storage

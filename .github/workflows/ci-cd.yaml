@@ -1,0 +1,101 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: "30 2 * * *"  # Daily at 8:00 AM IST
+  workflow_dispatch:
+
+jobs:
+
+  ########################
+  # 1. Train & Test Model
+  ########################
+  build-train-test:
+    runs-on: ubuntu-latest
+    outputs:
+      promotion_status: ${{ steps.promotion.outputs.status }}
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          submodules: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install Dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r app_requirements.txt
+          pip install -r requirements.txt || true
+
+      - name: Start MLflow Tracking Server
+        run: |
+          nohup mlflow server \
+            --backend-store-uri sqlite:///mlflow.db \
+            --default-artifact-root ./mlruns \
+            --host 127.0.0.1 \
+            --port 5000 > mlflow.log 2>&1 &
+
+          sleep 10  # Wait for MLflow to start
+          
+      - name: Run Model Training 
+        run: |
+          python main.py
+
+      - name: Run Experiment Tracking ( with MLflow)
+        run: |
+          python src/Experiment_Tracking_Prediction.py
+
+      - name: 🪵 Show MLflow Server Logs
+        run: cat mlflow.log
+
+      - name: Run Model Promotion Test
+        run: python -m unittest Test_Script/test_model_promotion.py
+
+      - name: Check for Promotion Success
+        id: promotion
+        run: |
+          if [ -f Test_Script/promotion_success.txt ]; then
+            echo "status=YES" >> $GITHUB_OUTPUT
+          else
+            echo "status=NO" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload MLflow Tracking Data
+        uses: actions/upload-artifact@v4
+        with:
+          name: mlflow-tracking
+          path: |
+            mlflow.db
+            mlruns
+
+  ##########################
+  # 2. Docker Deploy (if promoted)
+  ##########################
+  docker-deploy:
+    needs: build-train-test
+    if: needs.build-train-test.outputs.promotion_status == 'YES'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/stock_prediction_app:latest .
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/stock_prediction_app:latest

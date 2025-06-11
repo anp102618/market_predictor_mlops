@@ -1,0 +1,62 @@
+Data_Ingestion:
+  path:
+    database: "Data/data.db"
+    news_data_table: "news_data"
+    ticker_data_table: "ticker_data"
+    final_data_table: "final_data"
+    raw_finbert_csv: "Data/raw_data/finbert_data.csv"
+    new_news_data: "Data/new_data/news_data.csv"
+    raw_news_data: "Data/raw_data/news_data.csv"
+    new_ticker_csv: "Data/new_data/ticker_data.csv"
+    raw_ticker_csv: "Data/raw_data/ticker_data.csv"
+    final_data_csv: "Data/processed_data/final_data.csv"
+
+  const:
+    base_url: "https://in.investing.com/indices/s-p-cnx-nifty-news/"
+    links_xpath: "//ul[@data-test='news-list']//article[@data-test='article-item']//div[@class='relative']//a"
+    article_xpath: "//*[@id='article'][@class='article_container']//p"
+    date_xpath: "//span[contains(text(),'Published')]"
+    table_xpath: "//div[@class='container' and @data-testid='history-table']//table"
+
+
+Data_Validation:
+
+Data_Preprocessing:
+  path:
+    database: "Data/data.db"
+    final_data_table: "final_data"
+    preprocessed_csv: "Data/processed_data/preprocessed_data.csv"
+
+  const:
+    date_column: "date"
+    imputation_method: "knn"
+    outlier_method: "yeo"
+    iqr_threshold: 1.5
+    source_column: "nsei"
+    target_column: "target"
+
+Model_Tune_Evaluate:
+  path:
+    preprocessed_data_csv: "Data/processed_data/preprocessed_data.csv"
+    tuned_model_yaml: "Config_Yaml/tuned_model.yaml"
+    regressors_yaml: "Config_Yaml/regressors.yaml"
+
+  const:
+    allowed_models:
+      - lasso
+      - ridge
+      - xgboost
+
+
+Experiment_Tracking_Prediction:
+  path:
+    preprocessed_data_csv: "Data/processed_data/preprocessed_data.csv"
+    final_data_csv: "Data/processed_data/final_data.csv"
+    tuned_model_yaml: "Config_Yaml/tuned_model.yaml"
+    time_series_yaml: "Tuned_Model/time_series_predictions.yaml"
+    mlflow_details_yaml: "Tuned_Model/mlflow_details.yaml"
+    joblib_model_dir: "Tuned_Model/"
+
+  const:
+    mlflow_tracking_uri: "http://127.0.0.1:5000"
+    mlflow_stage: "Staging"
