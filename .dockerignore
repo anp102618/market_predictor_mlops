@@ -29,12 +29,6 @@ logs/
 *.pt
 *.pth
 
-
-# MLflow & DVC
-mlruns/
-.dvc/
-dvc.lock
-
 # IDE/editor config
 .vscode/
 .idea/
