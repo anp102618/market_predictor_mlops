@@ -1,4 +1,4 @@
-# Python cache files
+# Python cache
 __pycache__/
 *.py[cod]
 
@@ -18,31 +18,32 @@ logs/
 .env
 .env.*
 
-# Data files (optional, if data is local)
-data/
+# Data files
 *.csv
-*.tsv
-*.xlsx
-*.npy
-*.npz
+data/
 
-# Trained models
+# Model files
 *.pt
 *.pth
 *.pkl
+*.joblib
 models/
 Tuned_Models/
+
+# YAML configs
+*.yaml
+*.yml
 
 # ML experiment tracking
 mlruns/
 .dvc/
 dvc.lock
 
-# IDE/editor configs
+# IDE/editor settings
 .vscode/
 .idea/
 
-# Test & coverage
+# Testing & coverage
 .pytest_cache/
 .coverage
 htmlcov/
