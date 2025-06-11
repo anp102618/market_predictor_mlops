@@ -19,8 +19,6 @@ logs/
 .ipynb_checkpoints/
 
 # Data files
-data/
-*.csv
 *.tsv
 *.xlsx
 *.npy
@@ -30,8 +28,7 @@ data/
 *.pkl
 *.pt
 *.pth
-models/
-Tuned_Models/
+
 
 # MLflow & DVC
 mlruns/
