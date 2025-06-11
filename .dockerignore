@@ -1,46 +1,47 @@
-# Python cache and virtual env
+# Python cache
 __pycache__/
 *.py[cod]
-*.pyo
-*.pyd
-*.so
-*.egg-info/
-.env
-.venv/
+
+# Virtual environments
+env/
 venv/
+.venv/
 
 # Logs
-logs/
 *.log
+logs/
 
-# DVC cache and metadata
-.dvc/
-.dvcignore
-.dvc/cache/
-.dvc/tmp/
-.dvc/stage.dvc
+# Environment variables
+.env
+.env.*
 
-# Jupyter/Notebook artifacts
+# Jupyter checkpoints
 .ipynb_checkpoints/
-*.ipynb
 
-# OS & editor files
-.DS_Store
-Thumbs.db
+# Data files
+data/
+*.csv
+*.tsv
+*.xlsx
+*.npy
+*.npz
+
+# Trained models
+*.pkl
+*.pt
+*.pth
+models/
+Tuned_Models/
+
+# MLflow & DVC
+mlruns/
+.dvc/
+dvc.lock
+
+# IDE/editor config
 .vscode/
 .idea/
 
-# Large data/artifacts (if not needed inside container)
-Data/raw_data/
-Data/processed_data/
-Tuned_Model/
-*.joblib
-*.pkl
-*.csv
-*.yaml
-
-# Git
-.git/
-.gitignore
-
-
+# OS junk
+.DS_Store
+Thumbs.db
