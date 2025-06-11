@@ -23,16 +23,6 @@ def execute_pipeline():
         execute_data_preprocessing()
         execute_model_tune_evaluate()
         
-        # After your pipeline
-        run_dvc_command("dvc add Data/processed_data/final_data.csv")
-        run_dvc_command("dvc add Tuned_Model/model.joblib")
-        run_dvc_command("dvc add Tuned_Model/mlflow_details.yaml")
-        run_dvc_command("dvc add Tuned_Model/time_series_predictions.yaml")
-
-        run_dvc_command("git add .")
-        run_dvc_command("git commit -m 'Auto: Tracked artifacts with DVC'")
-        run_dvc_command("dvc push")  # Will push to local remote ~/dvc_storage
-
         logger.info("End to End ML pipeline execution completed successfully...")
 
     except CustomException as e:
