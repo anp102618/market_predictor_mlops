@@ -10,6 +10,7 @@ git add .
 git commit -m "Track with DVC"
 git push origin main
 
+git commit --allow-empty -m "Trigger CI"
 
 # after docker image uploaded to dockerhub :
 
