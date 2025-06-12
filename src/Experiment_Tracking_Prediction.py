@@ -22,18 +22,6 @@ from Model_Utils.time_series_models import time_series_forecasts, add_average_to
 
 # ------------------ Load Environment ------------------ 
 
-
-# Load from environment (GitHub Actions or local .env)
-DAGSHUB_USERNAME = os.environ.get("DAGSHUB_USERNAME")
-DAGSHUB_TOKEN = os.environ.get("DAGSHUB_TOKEN")
-MLFLOW_TRACKING_URI = os.environ.get("MLFLOW_TRACKING_URI")
-
-# Set tracking URI
-mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
-
-# Initialize Dagshub integration with token
-dagshub.init(repo_owner=DAGSHUB_USERNAME, repo_name="market_predictor_mlops", mlflow=True)
-
 logger = setup_logger(filename="logs")
 
 # ------------------ Load Config ------------------ #
@@ -74,6 +62,10 @@ def safe_log_metrics(metrics: dict, prefix: str):
 @track_performance
 def execute_mlflow_steps():
     try:
+        MLFLOW_TRACKING_URI = os.environ.get("MLFLOW_TRACKING_URI")
+        dagshub.init(repo_owner="anp102618", repo_name="market_predictor_mlops", mlflow=True)
+        # Set tracking URI
+        mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
         timestamp = datetime.now().strftime("%Y%m%d_%H%M")
         date = datetime.now().strftime("%Y%m%d")
 
