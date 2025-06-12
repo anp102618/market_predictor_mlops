@@ -57,13 +57,13 @@ jobs:
           git config --global user.email "a.n.prasad155@gmail.com"
           git remote set-url origin https://anp102618:${{ secrets.GH_TOKEN }}@github.com/anp102618/market_predictor_mlops.git
 
-      - name: Set up DVC Remote (DagsHub)
+      - name: Setup DVC Remote with DagsHub Auth
         run: |
-          # Add and configure DVC remote
-          dvc remote add -d origin https://dagshub.com/anp102618/market_predictor_mlops.dvc
-          dvc remote modify origin auth basic
+          dvc remote add origin https://dagshub.com/${{ secrets.DAGSHUB_USERNAME }}/market_predictor_mlops.dvc || true
           dvc remote modify origin user ${{ secrets.DAGSHUB_USERNAME }}
           dvc remote modify origin password ${{ secrets.DAGSHUB_TOKEN }}
+          dvc remote default origin
+          dvc config core.autostage true
 
           
       
@@ -84,11 +84,7 @@ jobs:
           git rm --cached Tuned_Model/time_series_predictions.yaml
             
       - name: Track Artifacts with DVC & Push to DagsHub
-        run: |
-          # Enable auto-staging
-          dvc config core.autostage true
-
-          # Track files
+        run: | 
           dvc add Data/processed_data/final_data.csv
           dvc add Tuned_Model/model.joblib
           dvc add Tuned_Model/mlflow_details.yaml
@@ -100,9 +96,11 @@ jobs:
                   Tuned_Model/mlflow_details.yaml.dvc \
                   Tuned_Model/time_series_predictions.yaml.dvc \
                   .dvc/config .dvcignore
-
-          # Commit only if something changed
-          git diff --cached --quiet || (git commit -m "Auto: Track artifacts with DVC" && git push origin main)
+          git add .
+          git pull origin main --rebase || echo "Rebase skipped"
+          git diff-index --quiet HEAD || git commit -m "Auto: Track artifacts with DVC"
+          
+          git push origin main
 
           # Push tracked data to DagsHub
           dvc push
