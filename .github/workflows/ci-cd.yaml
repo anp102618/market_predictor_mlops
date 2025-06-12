@@ -53,7 +53,7 @@ jobs:
       - name: Run Experiment Tracking (DagsHub MLflow)
         run: python src/Experiment_Tracking_Prediction.py
 
-      - name: Switch final_data.csv from Git to DVC
+      - name: delink with Git to DVC
         run: |
           git rm --cached Data/processed_data/final_data.csv
           git rm --cached Tuned_Model/model.joblib
@@ -66,9 +66,6 @@ jobs:
           dvc add Tuned_Model/model.joblib
           dvc add Tuned_Model/mlflow_details.yaml
           dvc add Tuned_Model/time_series_predictions.yaml
-
-          git config --global user.name "anp102618"
-          git config --global user.email "a.n.prasad155@gmail.com"
           git add .
           git commit -m "Auto: Switch final_data.csv from Git to DVC"
           git push origin main
