@@ -15,14 +15,14 @@ env:
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
   GH_PAT: ${{ secrets.GH_PAT }}
-  GH_TOKEN: ${{ secrets.GH_TOKEN}}
+  GH_TOKEN: ${{ secrets.GH_TOKEN }}
   MLFLOW_TRACKING_URI: https://dagshub.com/${{ secrets.DAGSHUB_USERNAME }}/market_predictor_mlops.mlflow
 
 jobs:
 
-  ########################
-  # 1. Train & Test Model
-  ########################
+  ######################################
+  # 1. Train, Track, and Test the Model
+  ######################################
   build-train-test:
     runs-on: ubuntu-latest
     outputs:
@@ -33,7 +33,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GH_TOKEN }}
-      
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -43,13 +43,20 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install -r app_requirements.txt
-          pip install -r requirements.txt || true
+          pip install -r requirements.txt || true  # in case some extras overlap
 
       - name: Run Model Training
         run: python main.py
 
-      - name: Run Experiment Tracking (DagsHub MLflow)
+      - name: Track MLflow Experiment on DagsHub
         run: python src/Experiment_Tracking_Prediction.py
+
+      - name: 🔌 Delink Artifacts from Git (for DVC tracking)
+        run: |
+          git rm --cached Data/processed_data/final_data.csv || true
+          git rm --cached Tuned_Model/model.joblib || true
+          git rm --cached Tuned_Model/mlflow_details.yaml || true
+          git rm --cached Tuned_Model/time_series_predictions.yaml || true
 
       - name: Configure Git Credentials
         run: |
@@ -57,58 +64,32 @@ jobs:
           git config --global user.email "a.n.prasad155@gmail.com"
           git remote set-url origin https://anp102618:${{ secrets.GH_TOKEN }}@github.com/anp102618/market_predictor_mlops.git
 
-      - name: Setup DVC Remote with DagsHub Auth
+      - name: Set up DVC Remote (DagsHub)
         run: |
-          dvc remote add origin https://dagshub.com/${{ secrets.DAGSHUB_USERNAME }}/market_predictor_mlops.dvc || true
-          dvc remote modify origin user ${{ secrets.DAGSHUB_USERNAME }}
-          dvc remote modify origin password ${{ secrets.DAGSHUB_TOKEN }}
-          dvc remote default origin
-          dvc config core.autostage true
+          dvc remote add --global origin https://dagshub.com/${{ secrets.DAGSHUB_USERNAME }}/market_predictor_mlops.dvc
+          dvc remote modify --global origin user ${{ secrets.DAGSHUB_USERNAME }}
+          dvc remote modify --global origin password ${{ secrets.DAGSHUB_TOKEN }}
 
-          
-      
-      - name: Clean Git Workspace Before Pull
+      - name: Track & Push Artifacts with DVC
         run: |
-          git reset --hard
-          git clean -fd
-          
-      - name: Pull latest from GitHub
-        run: |
-          git pull origin main --rebase
-
-      - name: delink with Git to DVC
-        run: |
-          git rm --cached Data/processed_data/final_data.csv
-          git rm --cached Tuned_Model/model.joblib
-          git rm --cached Tuned_Model/mlflow_details.yaml
-          git rm --cached Tuned_Model/time_series_predictions.yaml
-            
-      - name: Track Artifacts with DVC & Push to DagsHub
-        run: | 
           dvc add Data/processed_data/final_data.csv
           dvc add Tuned_Model/model.joblib
           dvc add Tuned_Model/mlflow_details.yaml
           dvc add Tuned_Model/time_series_predictions.yaml
 
-          # Commit .dvc files and config
-          git add Data/processed_data/final_data.csv.dvc \
-                  Tuned_Model/model.joblib.dvc \
-                  Tuned_Model/mlflow_details.yaml.dvc \
-                  Tuned_Model/time_series_predictions.yaml.dvc \
-                  .dvc/config .dvcignore
           git add .
-          git pull origin main --rebase || echo "Rebase skipped"
+          git pull origin main --rebase || echo "No rebase required"
           git diff-index --quiet HEAD || git commit -m "Auto: Track artifacts with DVC"
           
           git push origin main
-
-          # Push tracked data to DagsHub
           dvc push
 
       - name: Pull Artifacts for Testing
         run: |
-          dvc pull
-          dvc checkout
+          dvc pull Data/processed_data/final_data.csv
+          dvc pull Tuned_Model/model.joblib
+          dvc pull Tuned_Model/mlflow_details.yaml
+          dvc pull Tuned_Model/time_series_predictions.yaml
 
       - name: Run Model Promotion Test
         run: python -m unittest Test_Script/test.py
@@ -122,9 +103,9 @@ jobs:
             echo "status=NO" >> $GITHUB_OUTPUT
           fi
 
-  ###############################
-  # 2. Docker Build & Push (if promoted)
-  ###############################
+  ###################################################
+  # 2. Docker Build & Push (Only If Promotion Passed)
+  ###################################################
   docker-deploy:
     needs: build-train-test
     if: needs.build-train-test.outputs.promotion_status == 'YES'
