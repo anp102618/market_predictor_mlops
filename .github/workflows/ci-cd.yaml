@@ -83,16 +83,17 @@ jobs:
             
       - name: Track Artifacts with DVC & Push to DagsHub
         run: |
-          # Enable auto-staging so git add is not needed
+          # Enable auto-staging
           dvc config core.autostage true
 
-          # Track all artifacts (auto-staged)
+          # Track artifacts
           dvc add Data/processed_data/final_data.csv
           dvc add Tuned_Model/model.joblib
           dvc add Tuned_Model/mlflow_details.yaml
           dvc add Tuned_Model/time_series_predictions.yaml
 
-          # Commit only if changes exist
+          # Commit DVC metadata + config if changed
+          git add .dvc/config .dvcignore
           git diff --quiet || (git commit -am "Auto: Track artifacts with DVC" && git push origin main)
 
           # Push to DVC remote
