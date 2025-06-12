@@ -59,10 +59,10 @@ jobs:
 
       - name: Setup DVC Remote with DagsHub Auth
         run: |
-          dvc remote add --global origin https://dagshub.com/${{ secrets.DAGSHUB_USERNAME }}/market_predictor_mlops.dvc
-          dvc remote modify --global origin auth basic
-          dvc remote modify --global origin user ${{ secrets.DAGSHUB_USERNAME }}
-          dvc remote modify --global origin password ${{ secrets.DAGSHUB_TOKEN }}
+          dvc remote add origin https://dagshub.com/${{ secrets.DAGSHUB_USERNAME }}/market_predictor_mlops.dvc
+          dvc remote modify origin auth basic
+          dvc remote modify origin user ${{ secrets.DAGSHUB_USERNAME }}
+          dvc remote modify origin password ${{ secrets.DAGSHUB_TOKEN }}
           dvc remote default origin
       
       - name: Clean Git Workspace Before Pull
