@@ -20,8 +20,9 @@ from Common_Utils import (
 )
 from Model_Utils.time_series_models import time_series_forecasts, add_average_to_yaml
 
-# ------------------ Load Environment ------------------ 
 
+# ------------------ Load Environment ------------------ 
+dagshub.init(repo_owner="anp102618", repo_name="market_predictor_mlops", mlflow=True)
 logger = setup_logger(filename="logs")
 config = load_yaml("Config_Yaml/model_config.yaml")
 
@@ -61,7 +62,8 @@ def safe_log_metrics(metrics: dict, prefix: str):
 def execute_mlflow_steps():
     try:
         MLFLOW_TRACKING_URI = os.environ.get("MLFLOW_TRACKING_URI")
-     #   dagshub.init(repo_owner="anp102618", repo_name="market_predictor_mlops", mlflow=True)
+        os.environ["MLFLOW_TRACKING_USERNAME"] = os.getenv("DAGSHUB_USERNAME")
+        os.environ["MLFLOW_TRACKING_PASSWORD"] = os.getenv("DAGSHUB_TOKEN")
         # Set tracking URI
         mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
         timestamp = datetime.now().strftime("%Y%m%d_%H%M")
@@ -91,9 +93,11 @@ def execute_mlflow_steps():
 
         model = model_cls(**params)
         model.fit(X_train, y_train)
+        logger.info(" model fit completed successfully..")
 
         train_metrics = evaluate_metrics(y_train, model.predict(X_train), X_train.shape[1])
         val_metrics = evaluate_metrics(y_val, model.predict(X_val), X_val.shape[1])
+        logger.info("metrics evaluation completed successfully..")
 
         experiment_name = f"Experiment_{model_name}_{timestamp}"
         run_name = f"{model_name}_{timestamp}"

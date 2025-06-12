@@ -40,19 +40,12 @@ jobs:
           pip install --upgrade pip
           pip install -r app_requirements.txt
           pip install -r requirements.txt || true
-          pip install dvc[http] mlflow
 
       - name: Configure DVC Remote (DagsHub)
         run: |
           dvc remote add origin https://dagshub.com/${DAGSHUB_USERNAME}/market_predictor_mlops.dvc
           dvc remote modify origin user $DAGSHUB_USERNAME
           dvc remote modify origin password $DAGSHUB_TOKEN
-
-      - name: Set MLflow to Use DagsHub
-        run: |
-          echo "MLFLOW_TRACKING_URI=${MLFLOW_TRACKING_URI}" >> $GITHUB_ENV
-          export MLFLOW_TRACKING_URI=${MLFLOW_TRACKING_URI}
-          echo "MLflow tracking set to $MLFLOW_TRACKING_URI"
 
       - name: Run Model Training
         run: python main.py
