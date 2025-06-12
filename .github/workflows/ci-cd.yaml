@@ -63,7 +63,7 @@ jobs:
 
       - name: Setup DVC Remote with DagsHub Auth
         run: |
-          dvc remote modify origin url https://dagshub.com/${{ secrets.DAGSHUB_USERNAME }}/market_predictor_mlops.dvc
+          dvc remote add origin https://dagshub.com/${{ secrets.DAGSHUB_USERNAME }}/market_predictor_mlops.dvc
           dvc remote modify origin user ${{ secrets.DAGSHUB_USERNAME }}
           dvc remote modify origin password ${{ secrets.DAGSHUB_TOKEN }}
 
