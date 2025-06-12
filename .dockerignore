@@ -7,9 +7,6 @@ env/
 venv/
 .venv/
 
-# Logs
-*.log
-logs/
 
 # Environment variables
 .env
