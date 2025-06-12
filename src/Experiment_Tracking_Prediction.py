@@ -23,19 +23,17 @@ from Model_Utils.time_series_models import time_series_forecasts, add_average_to
 # ------------------ Load Environment ------------------ 
 
 logger = setup_logger(filename="logs")
+config = load_yaml("Config_Yaml/model_config.yaml")
 
 # ------------------ Load Config ------------------ #
-config = load_yaml("Config_Yaml/model_config.yaml")
-paths = config["Experiment_Tracking_Prediction"]["path"]
+preprocessed_data_csv: str = Path(config["Experiment_Tracking_Prediction"]["path"]["preprocessed_data_csv"])
+final_data_csv: str = Path(config["Experiment_Tracking_Prediction"]["path"]["final_data_csv"])
+tuned_model_yaml: str = Path(config["Experiment_Tracking_Prediction"]["path"]["tuned_model_yaml"])
+time_series_yaml: str = Path(config["Experiment_Tracking_Prediction"]["path"]["time_series_yaml"])
+mlflow_details_yaml: str = Path(config["Experiment_Tracking_Prediction"]["path"]["mlflow_details_yaml"])
+joblib_model_dir: str = Path(config["Experiment_Tracking_Prediction"]["path"]["joblib_model_dir"])
 
-preprocessed_data_csv = Path(paths["preprocessed_data_csv"])
-final_data_csv = Path(paths["final_data_csv"])
-tuned_model_yaml = Path(paths["tuned_model_yaml"])
-time_series_yaml = Path(paths["time_series_yaml"])
-mlflow_details_yaml = Path(paths["mlflow_details_yaml"])
-joblib_model_dir = Path(paths["joblib_model_dir"])
-
-STAGE = config["Experiment_Tracking_Prediction"]["const"]["mlflow_stage"]
+STAGE: str = config["Experiment_Tracking_Prediction"]["const"]["mlflow_stage"]
 
 # ------------------ Helpers ------------------ #
 def adjusted_r2(y_true, y_pred, p):
@@ -72,8 +70,11 @@ def execute_mlflow_steps():
         logger.info(f"MLflow tracking URI set to: {MLFLOW_TRACKING_URI}")
 
         config_model = load_yaml(tuned_model_yaml)
-        model_name = config_model["model"]
-        params = config_model["params"]
+        first_key = next(iter(config_model))
+
+    # 2️ Access the "model" field inside that first entry:
+        model_name = config_model[first_key]["model"]
+        params = config_model[first_key]["params"]
 
         df = pd.read_csv(preprocessed_data_csv, index_col=0).drop(columns=["date"])
         splitter = ScalingWithSplitStrategy()

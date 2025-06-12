@@ -3,6 +3,7 @@ import yaml
 import numpy as np
 import pandas as pd
 import mlflow
+import dagshub
 from abc import ABC, abstractmethod
 from datetime import datetime
 import warnings
@@ -16,6 +17,8 @@ from Common_Utils import setup_logger, track_performance, CustomException, load_
 
 # Setup logger
 logger = setup_logger(filename="logs")
+MLFLOW_TRACKING_URI = os.environ.get("MLFLOW_TRACKING_URI")
+mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
 
 # ---------------- Strategy Interface ---------------- #
 class ForecastStrategy(ABC):
