@@ -64,7 +64,12 @@ jobs:
           dvc remote modify --global origin user ${{ secrets.DAGSHUB_USERNAME }}
           dvc remote modify --global origin password ${{ secrets.DAGSHUB_TOKEN }}
           dvc remote default origin
-
+      
+      - name: Clean Git Workspace Before Pull
+        run: |
+          git reset --hard
+          git clean -fd
+          
       - name: Pull latest from GitHub
         run: |
           git pull origin main --rebase
