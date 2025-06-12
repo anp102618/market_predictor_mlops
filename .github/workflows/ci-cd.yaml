@@ -15,6 +15,7 @@ env:
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
   GH_PAT: ${{ secrets.GH_PAT }}
+  GH_TOKEN: ${{ secrets.GH_TOKEN}}
   MLFLOW_TRACKING_URI: https://dagshub.com/${{ secrets.DAGSHUB_USERNAME }}/market_predictor_mlops.mlflow
 
 jobs:
@@ -59,14 +60,13 @@ jobs:
         run: |
           git config --global user.name "anp102618"
           git config --global user.email "a.n.prasad155@gmail.com"
-          git remote set-url origin https://anp102618:${{ secrets.GH_PAT }}@github.com/anp102618/market_predictor_mlops.git
+          git remote set-url origin https://anp102618:${{ secrets.GH_TOKEN }}@github.com/anp102618/market_predictor_mlops.git
 
       - name: Setup DVC Remote with DagsHub Auth
         run: |
-          dvc remote add origin https://dagshub.com/${{ secrets.DAGSHUB_USERNAME }}/market_predictor_mlops.dvc
-          dvc remote modify origin user ${{ secrets.DAGSHUB_USERNAME }}
-          dvc remote modify origin password ${{ secrets.DAGSHUB_TOKEN }}
-
+          dvc remote add --global origin https://dagshub.com/${{ secrets.DAGSHUB_USERNAME }}/market_predictor_mlops.dvc
+          dvc remote modify --global origin user ${{ secrets.DAGSHUB_USERNAME }}
+          dvc remote modify --global origin password ${{ secrets.DAGSHUB_TOKEN }}
 
       - name: Track Artifacts with DVC & Push to DagsHub
         run: |
@@ -74,11 +74,14 @@ jobs:
           dvc add Tuned_Model/model.joblib
           dvc add Tuned_Model/mlflow_details.yaml
           dvc add Tuned_Model/time_series_predictions.yaml
+          
           git add .
-          git commit -m "Auto: Switch final_data.csv from Git to DVC" || echo "No changes to commit"
+          git pull origin main --rebase || echo "Rebase skipped"
+          git diff-index --quiet HEAD || git commit -m "Auto: Track artifacts with DVC"
+          
           git push origin main
           dvc push
-
+      
       - name: Pull Artifacts for Testing
         run: |
           dvc pull Data/processed_data/final_data.csv
