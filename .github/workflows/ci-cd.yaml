@@ -90,6 +90,7 @@ jobs:
           dvc pull Tuned_Model/model.joblib
           dvc pull Tuned_Model/mlflow_details.yaml
           dvc pull Tuned_Model/time_series_predictions.yaml
+          dvc checkout
 
       - name: Run Model Promotion Test
         run: python -m unittest Test_Script/test.py
