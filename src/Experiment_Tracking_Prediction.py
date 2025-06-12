@@ -21,14 +21,26 @@ from Common_Utils import (
 from Model_Utils.time_series_models import time_series_forecasts, add_average_to_yaml
 from dotenv import load_dotenv
 
-# ------------------ Load Environment ------------------ #
+# ------------------ Load Environment ------------------ 
+
+# Optional: load from .env if running locally
 load_dotenv()
-DAGSHUB_USER = os.getenv("DAGSHUB_USER")
+
+# Load from environment (GitHub Actions or local .env)
+DAGSHUB_USERNAME = os.getenv("DAGSHUB_USERNAME")
 DAGSHUB_TOKEN = os.getenv("DAGSHUB_TOKEN")
 MLFLOW_TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI")
 
+# Set tracking URI
 mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
-dagshub.init(repo_owner='anp102618', repo_name='market_predictor_mlops', mlflow=True)
+
+# Initialize Dagshub integration with token
+dagshub.init(
+    repo_owner=DAGSHUB_USERNAME,
+    repo_name="market_predictor_mlops",
+    mlflow=True,
+    token=DAGSHUB_TOKEN
+)
 logger = setup_logger(filename="logs")
 
 # ------------------ Load Config ------------------ #
