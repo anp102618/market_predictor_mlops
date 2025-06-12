@@ -6,6 +6,7 @@ import os
 import pandas as pd
 from scipy.stats import ks_2samp
 from mlflow.tracking import MlflowClient
+import dagshub
 from mlflow.exceptions import MlflowException
 from Common_Utils import setup_logger, track_performance, CustomException
 
@@ -45,14 +46,14 @@ class TestModelPromotion(unittest.TestCase):
             logger.info(f"Previous adj_r2: {prev_adj_r2}, Current adj_r2: {curr_adj_r2}, Drop: {drop}")
             return drop > threshold
 
-        except Exception as e:
+        except CustomException as e:
             logger.error(f"Error in model drift detection: {e}")
             return False
 
     def get_latest_model_info(self, client, experiment_name="Default"):
         experiment = client.get_experiment_by_name(experiment_name)
         if not experiment:
-            raise CustomException(f"Experiment '{experiment_name}' not found.")
+            raise ValueError(f"Experiment '{experiment_name}' not found.")
 
         runs = client.search_runs(
             experiment_ids=[experiment.experiment_id],
@@ -61,20 +62,27 @@ class TestModelPromotion(unittest.TestCase):
         )
 
         if not runs:
-            raise CustomException("No runs found in experiment.")
+            raise RuntimeError("No runs found in the experiment.")
 
         run = runs[0]
         run_id = run.info.run_id
-        model_name = run.data.tags.get("mlflow.log-model.history")
-        if not model_name:
-            raise CustomException("Model name not found in latest run tags.")
-        # If model_name is in the form of a list, parse it
+
+        model_name_tag = run.data.tags.get("mlflow.log-model.history")
+        if not model_name_tag:
+            raise KeyError("Tag 'mlflow.log-model.history' not found in the latest run.")
+
         import json
-        model_hist = json.loads(model_name)
+        try:
+            model_hist = json.loads(model_name_tag)
+        except json.JSONDecodeError:
+            raise ValueError("Tag 'mlflow.log-model.history' is not valid JSON.")
+
         registered_model = model_hist[0].get("name")
         if not registered_model:
-            raise CustomException("No registered model name found in tag.")
+            raise ValueError("Registered model name not found in tag data.")
+
         return registered_model, run_id
+
 
     @track_performance
     def get_stage_from_run_id(self, client, model_name, run_id):
@@ -166,7 +174,7 @@ class TestModelPromotion(unittest.TestCase):
                 logger.info("Promotion conditions not met – no promotion.")
                 self.assertTrue(True, "Promotion conditions not satisfied – skipping promotion.")
 
-        except Exception as e:
+        except CustomException as e:
             logger.error(f"Unexpected error in test model promotion: {e}")
             self.fail(f"Exception occurred: {e}")
 
