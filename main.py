@@ -1,15 +1,17 @@
 import os 
 import pandas as pd 
 import numpy as np
+import mlflow
 from Common_Utils import setup_logger, track_performance, CustomException, execute_files_backup
 from src.Data_Ingestion import execute_data_ingestion
 from src.Data_Validation import execute_data_validation
 from src.Data_Preprocessing import execute_data_preprocessing
 from src.Model_Tune_Evaluate import execute_model_tune_evaluate
-from src.Experiment_Tracking_Prediction import execute_mlflow_steps
-from Common_Utils import run_dvc_command
 
 
+MLFLOW_TRACKING_URI = os.environ.get("MLFLOW_TRACKING_URI")
+mlflow.set_tracking_uri(MLFLOW_TRACKING_URI
+                        )
 logger = setup_logger(filename="logs")
 
 @track_performance
