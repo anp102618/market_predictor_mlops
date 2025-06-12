@@ -76,6 +76,12 @@ jobs:
         run: |
           git pull origin main --rebase
 
+      - name: delink with Git to DVC
+        run: |
+          git rm --cached Data/processed_data/final_data.csv
+          git rm --cached Tuned_Model/model.joblib
+          git rm --cached Tuned_Model/mlflow_details.yaml
+          git rm --cached Tuned_Model/time_series_predictions.yaml
             
       - name: Track Artifacts with DVC & Push to DagsHub
         run: |
