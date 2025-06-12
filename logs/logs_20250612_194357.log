@@ -1,0 +1,68 @@
+[2025-06-12 19:43:57,980] 123 __init__.py - INFO - Loaded config from Config_Yaml/model_config.yaml
+[2025-06-12 19:43:57,980] 100 __init__.py - INFO - Running 'execute_mlflow_steps'...
+[2025-06-12 19:43:57,980] 71 Experiment_Tracking_Prediction.py - INFO - MLflow tracking URI set to: https://dagshub.com/anp102618/market_predictor_mlops.mlflow
+[2025-06-12 19:43:57,995] 123 __init__.py - INFO - Loaded config from Config_Yaml/tuned_model.yaml
+[2025-06-12 19:43:58,005] 100 __init__.py - INFO - Running 'apply'...
+[2025-06-12 19:43:58,041] 85 feature_splitting_scaling.py - INFO - Successfully applied scaling and data splitting.
+[2025-06-12 19:43:58,042] 111 __init__.py - INFO - 'apply' completed in 0.0365 sec
+[2025-06-12 19:43:58,042] 112 __init__.py - INFO - Memory used: 1039.05 KB (peak: 1280.75 KB)
+[2025-06-12 19:43:58,047] 95 Experiment_Tracking_Prediction.py - INFO -  model fit completed successfully..
+[2025-06-12 19:43:58,052] 99 Experiment_Tracking_Prediction.py - INFO - metrics evaluation completed successfully..
+[2025-06-12 19:43:58,383] 107 Experiment_Tracking_Prediction.py - INFO - Started MLflow run: cc3b2654392e41c396fd3e78f348de66
+[2025-06-12 19:44:30,229] 100 __init__.py - INFO - Running 'time_series_forecasts'...
+[2025-06-12 19:44:30,242] 138 time_series_models.py - INFO -  final_df successfully read ito variable df 
+[2025-06-12 19:44:30,242] 100 __init__.py - INFO - Running 'forecast_next'...
+[2025-06-12 19:44:30,244] 111 __init__.py - INFO - 'forecast_next' completed in 0.0016 sec
+[2025-06-12 19:44:30,244] 112 __init__.py - INFO - Memory used: 324.58 KB (peak: 826.51 KB)
+[2025-06-12 19:44:33,229] 147 time_series_models.py - INFO - GBM forecast successfully completed
+[2025-06-12 19:44:36,246] 154 time_series_models.py - INFO - ARIMA forecast successfully completed
+[2025-06-12 19:44:36,246] 100 __init__.py - INFO - Running 'forecast_next'...
+[2025-06-12 19:44:37,033] 111 __init__.py - INFO - 'forecast_next' completed in 0.7872 sec
+[2025-06-12 19:44:37,034] 112 __init__.py - INFO - Memory used: 1197.07 KB (peak: 38510.00 KB)
+[2025-06-12 19:44:39,228] 161 time_series_models.py - INFO - Prophet forecast successfully completed
+[2025-06-12 19:44:39,228] 100 __init__.py - INFO - Running 'forecast_next'...
+[2025-06-12 19:44:39,360] 111 __init__.py - INFO - 'forecast_next' completed in 0.1322 sec
+[2025-06-12 19:44:39,361] 112 __init__.py - INFO - Memory used: 127.28 KB (peak: 1138.66 KB)
+[2025-06-12 19:44:42,229] 168 time_series_models.py - INFO - VAR forecast successfully completed
+[2025-06-12 19:44:42,229] 171 time_series_models.py - INFO - Next Day Price Predictions:
+[2025-06-12 19:44:42,229] 174 time_series_models.py - INFO - GBM: 25250.4
+[2025-06-12 19:44:42,229] 174 time_series_models.py - INFO - ARIMA: 25142.0
+[2025-06-12 19:44:42,229] 174 time_series_models.py - INFO - Prophet: 24666.15
+[2025-06-12 19:44:42,229] 174 time_series_models.py - INFO - VAR: 25131.89
+[2025-06-12 19:44:42,230] 183 time_series_models.py - INFO - Predictions saved to Tuned_Model/time_series_predictions.yaml
+[2025-06-12 19:44:42,230] 111 __init__.py - INFO - 'time_series_forecasts' completed in 12.0012 sec
+[2025-06-12 19:44:42,230] 112 __init__.py - INFO - Memory used: 0.00 KB (peak: 0.00 KB)
+[2025-06-12 19:44:42,232] 152 __init__.py - INFO - Appended and saved config to Tuned_Model/time_series_predictions.yaml
+[2025-06-12 19:44:42,235] 152 __init__.py - INFO - Appended and saved config to Tuned_Model/time_series_predictions.yaml
+[2025-06-12 19:44:42,236] 123 __init__.py - INFO - Loaded config from Tuned_Model/time_series_predictions.yaml
+[2025-06-12 19:44:42,238] 152 __init__.py - INFO - Appended and saved config to Tuned_Model/time_series_predictions.yaml
+[2025-06-12 19:44:42,238] 128 time_series_models.py - INFO - Appended average_expected: 25080.29 to Tuned_Model/time_series_predictions.yaml
+[2025-06-12 19:44:42,238] 217 __init__.py - INFO - Deleted: Tuned_Model/model.joblib
+[2025-06-12 19:44:42,238] 217 __init__.py - INFO - Deleted: Tuned_Model/model copy.joblib
+[2025-06-12 19:44:46,229] 184 Experiment_Tracking_Prediction.py - ERROR - Unhandled exception: INTERNAL_ERROR: Response: {'error': 'unsupported endpoint, please contact support@dagshub.com'}
+Traceback (most recent call last):
+  File "/home/runner/work/market_predictor_mlops/market_predictor_mlops/src/Experiment_Tracking_Prediction.py", line 141, in execute_mlflow_steps
+    mlflow.sklearn.log_model(model, artifact_path=model_name, input_example=X_train.iloc[:1], signature=signature)
+  File "/opt/hostedtoolcache/Python/3.10.17/x64/lib/python3.10/site-packages/mlflow/sklearn/__init__.py", line 426, in log_model
+    return Model.log(
+  File "/opt/hostedtoolcache/Python/3.10.17/x64/lib/python3.10/site-packages/mlflow/models/model.py", line 1161, in log
+    model = mlflow.initialize_logged_model(
+  File "/opt/hostedtoolcache/Python/3.10.17/x64/lib/python3.10/site-packages/mlflow/tracking/fluent.py", line 2130, in initialize_logged_model
+    model = _create_logged_model(
+  File "/opt/hostedtoolcache/Python/3.10.17/x64/lib/python3.10/site-packages/mlflow/tracking/fluent.py", line 2257, in _create_logged_model
+    return MlflowClient().create_logged_model(
+  File "/opt/hostedtoolcache/Python/3.10.17/x64/lib/python3.10/site-packages/mlflow/tracking/client.py", line 5356, in create_logged_model
+    return self._tracking_client.create_logged_model(
+  File "/opt/hostedtoolcache/Python/3.10.17/x64/lib/python3.10/site-packages/mlflow/tracking/_tracking_service/client.py", line 824, in create_logged_model
+    return self.store.create_logged_model(
+  File "/opt/hostedtoolcache/Python/3.10.17/x64/lib/python3.10/site-packages/mlflow/store/tracking/rest_store.py", line 936, in create_logged_model
+    response_proto = self._call_endpoint(CreateLoggedModel, req_body)
+  File "/opt/hostedtoolcache/Python/3.10.17/x64/lib/python3.10/site-packages/mlflow/store/tracking/rest_store.py", line 135, in _call_endpoint
+    return call_endpoint(
+  File "/opt/hostedtoolcache/Python/3.10.17/x64/lib/python3.10/site-packages/mlflow/utils/rest_utils.py", line 590, in call_endpoint
+    response = verify_rest_response(response, endpoint)
+  File "/opt/hostedtoolcache/Python/3.10.17/x64/lib/python3.10/site-packages/mlflow/utils/rest_utils.py", line 304, in verify_rest_response
+    raise RestException(json.loads(response.text))
+mlflow.exceptions.RestException: INTERNAL_ERROR: Response: {'error': 'unsupported endpoint, please contact support@dagshub.com'}
+[2025-06-12 19:44:46,232] 111 __init__.py - INFO - 'execute_mlflow_steps' completed in 48.2515 sec
+[2025-06-12 19:44:46,232] 112 __init__.py - INFO - Memory used: 0.00 KB (peak: 0.00 KB)
