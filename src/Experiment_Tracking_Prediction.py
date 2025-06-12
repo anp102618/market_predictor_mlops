@@ -39,7 +39,7 @@ dagshub.init(
     repo_owner=DAGSHUB_USERNAME,
     repo_name="market_predictor_mlops",
     mlflow=True,
-    token=DAGSHUB_TOKEN
+    
 )
 logger = setup_logger(filename="logs")
 
