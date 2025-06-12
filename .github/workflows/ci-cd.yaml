@@ -57,12 +57,14 @@ jobs:
           git config --global user.email "a.n.prasad155@gmail.com"
           git remote set-url origin https://anp102618:${{ secrets.GH_TOKEN }}@github.com/anp102618/market_predictor_mlops.git
 
-      - name: Setup DVC Remote with DagsHub Auth
+      - name: Set up DVC Remote (DagsHub)
         run: |
-          dvc remote add -f -d dags_hub https://dagshub.com/${{ secrets.DAGSHUB_USERNAME }}/market_predictor_mlops.dvc
-          dvc remote modify dags_hub auth basic
-          dvc remote modify dags_hub user ${{ secrets.DAGSHUB_USERNAME }}
-          dvc remote modify dags_hub password ${{ secrets.DAGSHUB_TOKEN }}
+          # Add and configure DVC remote
+          dvc remote add -d origin https://dagshub.com/anp102618/market_predictor_mlops.dvc
+          dvc remote modify origin auth basic
+          dvc remote modify origin user ${{ secrets.DAGSHUB_USERNAME }}
+          dvc remote modify origin password ${{ secrets.DAGSHUB_TOKEN }}
+
           
       
       - name: Clean Git Workspace Before Pull
@@ -74,29 +76,29 @@ jobs:
         run: |
           git pull origin main --rebase
 
-      - name: Untrack DVC Files from Git
-        run: |
-          git rm --cached Data/processed_data/final_data.csv || true
-          git rm --cached Tuned_Model/model.joblib || true
-          git rm --cached Tuned_Model/mlflow_details.yaml || true
-          git rm --cached Tuned_Model/time_series_predictions.yaml || true
             
       - name: Track Artifacts with DVC & Push to DagsHub
         run: |
           # Enable auto-staging
           dvc config core.autostage true
 
-          # Track artifacts
+          # Track files
           dvc add Data/processed_data/final_data.csv
           dvc add Tuned_Model/model.joblib
           dvc add Tuned_Model/mlflow_details.yaml
           dvc add Tuned_Model/time_series_predictions.yaml
 
-          # Commit DVC metadata + config if changed
-          git add .dvc/config .dvcignore
-          git diff --quiet || (git commit -am "Auto: Track artifacts with DVC" && git push origin main)
+          # Commit .dvc files and config
+          git add Data/processed_data/final_data.csv.dvc \
+                  Tuned_Model/model.joblib.dvc \
+                  Tuned_Model/mlflow_details.yaml.dvc \
+                  Tuned_Model/time_series_predictions.yaml.dvc \
+                  .dvc/config .dvcignore
 
-          # Push to DVC remote
+          # Commit only if something changed
+          git diff --cached --quiet || (git commit -m "Auto: Track artifacts with DVC" && git push origin main)
+
+          # Push tracked data to DagsHub
           dvc push
 
       - name: Pull Artifacts for Testing
