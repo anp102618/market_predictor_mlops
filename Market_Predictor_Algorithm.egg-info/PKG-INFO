@@ -6,7 +6,7 @@ Author: ANP
 Requires-Python: >=3.7
 Requires-Dist: torch>=1.13.0
 Requires-Dist: transformers>=4.30.0
-Requires-Dist: mlflow>=2.0.0
+Requires-Dist: mlflow
 Requires-Dist: tqdm>=4.65.0
 Requires-Dist: pyyaml>=6.0
 Requires-Dist: tensorflow
