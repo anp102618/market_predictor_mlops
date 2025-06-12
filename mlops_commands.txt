@@ -37,3 +37,11 @@ localhost:3000
         run_dvc_command("git add .")
         run_dvc_command("git commit -m 'Auto: Tracked artifacts with DVC'")
         run_dvc_command("dvc push")  # Will push to local remote ~/dvc_storage
+
+
+        - name: delink with Git to DVC
+        run: |
+          git rm --cached Data/processed_data/final_data.csv
+          git rm --cached Tuned_Model/model.joblib
+          git rm --cached Tuned_Model/mlflow_details.yaml
+          git rm --cached Tuned_Model/time_series_predictions.yaml

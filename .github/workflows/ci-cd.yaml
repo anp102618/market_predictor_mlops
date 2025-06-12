@@ -51,14 +51,7 @@ jobs:
       - name: Run Experiment Tracking (DagsHub MLflow)
         run: python src/Experiment_Tracking_Prediction.py
 
-      - name: delink with Git to DVC
-        run: |
-          git rm --cached Data/processed_data/final_data.csv
-          git rm --cached Tuned_Model/model.joblib
-          git rm --cached Tuned_Model/mlflow_details.yaml
-          git rm --cached Tuned_Model/time_series_predictions.yaml
-
-      - name: Configure Git Credentials
+     - name: Configure Git Credentials
         run: |
           git config --global user.name "anp102618"
           git config --global user.email "a.n.prasad155@gmail.com"
@@ -67,29 +60,31 @@ jobs:
       - name: Setup DVC Remote with DagsHub Auth
         run: |
           dvc remote add --global origin https://dagshub.com/${{ secrets.DAGSHUB_USERNAME }}/market_predictor_mlops.dvc
+          dvc remote modify --global origin auth basic
           dvc remote modify --global origin user ${{ secrets.DAGSHUB_USERNAME }}
           dvc remote modify --global origin password ${{ secrets.DAGSHUB_TOKEN }}
           dvc remote default origin
-          dvc config core.autostage true
 
       - name: Track Artifacts with DVC & Push to DagsHub
         run: |
+          # Enable auto-staging so git add is not needed
+          dvc config core.autostage true
+
+          # Track all artifacts (auto-staged)
           dvc add Data/processed_data/final_data.csv
           dvc add Tuned_Model/model.joblib
           dvc add Tuned_Model/mlflow_details.yaml
           dvc add Tuned_Model/time_series_predictions.yaml
-          
-          git add .
-          git diff-index --quiet HEAD || git commit -m "Auto: Track artifacts with DVC"
-          git push origin main
+
+          # Commit only if changes exist
+          git diff --quiet || (git commit -am "Auto: Track artifacts with DVC" && git push origin main)
+
+          # Push to DVC remote
           dvc push
-      
+
       - name: Pull Artifacts for Testing
         run: |
-          dvc pull Data/processed_data/final_data.csv
-          dvc pull Tuned_Model/model.joblib
-          dvc pull Tuned_Model/mlflow_details.yaml
-          dvc pull Tuned_Model/time_series_predictions.yaml
+          dvc pull
           dvc checkout
 
       - name: Run Model Promotion Test
