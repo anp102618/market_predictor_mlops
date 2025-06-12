@@ -7,11 +7,9 @@ from src.Data_Ingestion import execute_data_ingestion
 from src.Data_Validation import execute_data_validation
 from src.Data_Preprocessing import execute_data_preprocessing
 from src.Model_Tune_Evaluate import execute_model_tune_evaluate
-from src.Experiment_Tracking_Prediction import execute_mlflow_steps
 
 MLFLOW_TRACKING_URI = os.environ.get("MLFLOW_TRACKING_URI")
-mlflow.set_tracking_uri(MLFLOW_TRACKING_URI
-                        )
+mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
 logger = setup_logger(filename="logs")
 
 @track_performance
@@ -24,7 +22,6 @@ def execute_pipeline():
         execute_data_validation()
         execute_data_preprocessing()
         execute_model_tune_evaluate()
-        execute_mlflow_steps()
         logger.info("End to End ML pipeline execution completed successfully...")
 
     except CustomException as e:

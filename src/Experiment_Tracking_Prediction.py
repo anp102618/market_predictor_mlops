@@ -13,7 +13,6 @@ from xgboost import XGBRegressor
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from mlflow.tracking import MlflowClient
 from mlflow.models import infer_signature
-
 from Model_Utils.feature_splitting_scaling import ScalingWithSplitStrategy
 from Common_Utils import (
     setup_logger, track_performance, CustomException,
@@ -22,6 +21,8 @@ from Common_Utils import (
 from Model_Utils.time_series_models import time_series_forecasts, add_average_to_yaml
 
 # ------------------ Logger & Config ------------------ #
+MLFLOW_TRACKING_URI = os.environ.get("MLFLOW_TRACKING_URI")
+mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
 dagshub.init(repo_owner='anp102618', repo_name='market_predictor_mlops', mlflow=True)
 logger = setup_logger(filename="logs")
 config = load_yaml("Config_Yaml/model_config.yaml")
@@ -63,6 +64,7 @@ def safe_log_metrics(metrics: dict, prefix: str):
 
 
 # ------------------ Main MLflow Pipeline ------------------ #
+@track_performance
 def execute_mlflow_steps():
     try:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M")
