@@ -106,7 +106,7 @@ class TestModelPromotion(unittest.TestCase):
     def test_model_promotion(self):
         try:
             client = MlflowClient()
-            model_name, run_id = self.get_latest_model_info(client, experiment_name="Default")
+            model_name, run_id = self.get_latest_model_info(client, experiment_name="market-predictor-ml")
 
             current_stage = self.get_stage_from_run_id(client, model_name, run_id)
             self.assertIsNotNone(current_stage, f"Could not determine stage for run_id: {run_id}")

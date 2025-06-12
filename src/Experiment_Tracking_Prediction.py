@@ -98,7 +98,7 @@ def execute_mlflow_steps():
         val_metrics = evaluate_metrics(y_val, model.predict(X_val), X_val.shape[1])
         logger.info("metrics evaluation completed successfully..")
 
-        experiment_name = f"Experiment_{model_name}_{timestamp}"
+        experiment_name = "market-predictor-ml"
         run_name = f"{model_name}_{timestamp}"
         mlflow.set_experiment(experiment_name)
 
