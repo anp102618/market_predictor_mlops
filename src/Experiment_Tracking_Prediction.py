@@ -19,16 +19,22 @@ from Common_Utils import (
     load_yaml, write_yaml, append_yaml, delete_joblib_model
 )
 from Model_Utils.time_series_models import time_series_forecasts, add_average_to_yaml
+from dotenv import load_dotenv
 
-# ------------------ Logger & Config ------------------ #
-MLFLOW_TRACKING_URI = os.environ.get("MLFLOW_TRACKING_URI")
+# ------------------ Load Environment ------------------ #
+load_dotenv()
+DAGSHUB_USER = os.getenv("DAGSHUB_USER")
+DAGSHUB_TOKEN = os.getenv("DAGSHUB_TOKEN")
+MLFLOW_TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI")
+
 mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
 dagshub.init(repo_owner='anp102618', repo_name='market_predictor_mlops', mlflow=True)
 logger = setup_logger(filename="logs")
-config = load_yaml("Config_Yaml/model_config.yaml")
 
-# ---------- Paths ---------- #
+# ------------------ Load Config ------------------ #
+config = load_yaml("Config_Yaml/model_config.yaml")
 paths = config["Experiment_Tracking_Prediction"]["path"]
+
 preprocessed_data_csv = Path(paths["preprocessed_data_csv"])
 final_data_csv = Path(paths["final_data_csv"])
 tuned_model_yaml = Path(paths["tuned_model_yaml"])
@@ -36,10 +42,7 @@ time_series_yaml = Path(paths["time_series_yaml"])
 mlflow_details_yaml = Path(paths["mlflow_details_yaml"])
 joblib_model_dir = Path(paths["joblib_model_dir"])
 
-# ---------- Constants ---------- #
-MLFLOW_TRACKING_URI = os.environ.get("MLFLOW_TRACKING_URI")
 STAGE = config["Experiment_Tracking_Prediction"]["const"]["mlflow_stage"]
-
 
 # ------------------ Helpers ------------------ #
 def adjusted_r2(y_true, y_pred, p):
@@ -62,7 +65,6 @@ def safe_log_metrics(metrics: dict, prefix: str):
         except Exception as e:
             logger.warning(f"Failed to log metric {prefix}_{k}: {e}")
 
-
 # ------------------ Main MLflow Pipeline ------------------ #
 @track_performance
 def execute_mlflow_steps():
@@ -70,7 +72,6 @@ def execute_mlflow_steps():
         timestamp = datetime.now().strftime("%Y%m%d_%H%M")
         date = datetime.now().strftime("%Y%m%d")
 
-        mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
         logger.info(f"MLflow tracking URI set to: {MLFLOW_TRACKING_URI}")
 
         config_model = load_yaml(tuned_model_yaml)
@@ -81,17 +82,16 @@ def execute_mlflow_steps():
         splitter = ScalingWithSplitStrategy()
         X_train, X_val, X_test, y_train, y_val, y_test = splitter.apply(df)
 
-        # Model selection
-        model = {
+        model_cls = {
             "lasso": Lasso,
             "ridge": Ridge,
             "xgboost": XGBRegressor
-        }.get(model_name.lower(), None)
+        }.get(model_name.lower())
 
-        if model is None:
+        if model_cls is None:
             raise CustomException(f"Unsupported model: {model_name}")
-        
-        model = model(**params)
+
+        model = model_cls(**params)
         model.fit(X_train, y_train)
 
         train_metrics = evaluate_metrics(y_train, model.predict(X_train), X_train.shape[1])
@@ -110,10 +110,11 @@ def execute_mlflow_steps():
             safe_log_metrics(train_metrics, "train")
             safe_log_metrics(val_metrics, "val")
 
-            # Combine train+val and evaluate on test
+            # Combine train+val for final training
             X_combined = np.vstack((X_train, X_val))
             y_combined = np.concatenate((y_train, y_val))
             model.fit(X_combined, y_combined)
+
             test_metrics = evaluate_metrics(y_test[:-1], model.predict(X_test.iloc[:-1]), X_test.shape[1])
             safe_log_metrics(test_metrics, "test")
 
@@ -122,34 +123,28 @@ def execute_mlflow_steps():
             last_row_pred = float(model.predict(last_row)[0])
             mlflow.log_metric("last_xtest_row_prediction", last_row_pred)
 
-            # Time series forecasts
+            # Time series logging
             time_series_forecasts()
             append_yaml(time_series_yaml, {model_name: last_row_pred})
             df_final = pd.read_csv(final_data_csv, index_col=0)
             append_yaml(time_series_yaml, {"last_value": df_final['nsei'].iloc[-1]})
             add_average_to_yaml(time_series_yaml)
 
-            # Save local model
+            # Save & log model
             model_path = Path("Tuned_Model/model.joblib")
             model_path.parent.mkdir(parents=True, exist_ok=True)
             delete_joblib_model(model_path.parent)
             joblib.dump(model, model_path)
 
-            # Log model to MLflow
             signature = infer_signature(X_train, model.predict(X_train))
-            mlflow.sklearn.log_model(
-                model, artifact_path=model_name,
-                input_example=X_train.iloc[:1], signature=signature
-            )
+            mlflow.sklearn.log_model(model, artifact_path=model_name, input_example=X_train.iloc[:1], signature=signature)
             logger.info("Model artifact logged to MLflow.")
 
-            # Register model
+            # Register and transition
             model_uri = f"runs:/{run_id}/{model_name}"
             registered = mlflow.register_model(model_uri, model_name)
             model_version = registered.version
-            logger.info(f"Model registered: version {model_version}")
 
-            # Transition to STAGE
             client = MlflowClient()
             client.transition_model_version_stage(model_name, model_version, stage=STAGE, archive_existing_versions=True)
             client.set_model_version_tag(model_name, model_version, "version_status", STAGE)
@@ -186,7 +181,6 @@ def execute_mlflow_steps():
         logger.exception(f"Custom error: {ce}")
     except Exception as e:
         logger.exception(f"Unhandled exception: {e}")
-
 
 if __name__ == "__main__":
     execute_mlflow_steps()
