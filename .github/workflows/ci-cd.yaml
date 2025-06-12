@@ -58,7 +58,7 @@ jobs:
         run: cat mlflow.log
 
       - name: Run Model Promotion Test
-        run: python -m unittest Test_Script/test_model_promotion.py
+        run: python -m unittest Test_Script/test.py
 
       - name: Check for Promotion Success
         id: promotion
