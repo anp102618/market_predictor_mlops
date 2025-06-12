@@ -2,35 +2,35 @@ best_params:
   alpha: 0.1
   max_iter: 1000
 mlflow_run:
-  artifact_uri: mlflow-artifacts:/484716507361829302/bad5fbfb8d774401bc85a5b11e0f9394/artifacts
+  artifact_uri: mlflow-artifacts:/952622914516269523/fb68c9cf61344e9193980a7d73a1a8fc/artifacts
   current_stage: Staging
   end_time: null
-  experiment_id: '484716507361829302'
-  experiment_name: Experiment_Lasso_20250610_134815
-  last_row_prediction: 25187.144770265757
-  model_uri: runs:/bad5fbfb8d774401bc85a5b11e0f9394/artifacts/Lasso
-  model_version: '18'
-  run_id: bad5fbfb8d774401bc85a5b11e0f9394
-  run_name: Lasso_20250610_1348
-  start_time: 1749543496022
+  experiment_id: '952622914516269523'
+  experiment_name: Experiment_Lasso_20250609_113229
+  last_row_prediction: 25119.488891846675
+  model_uri: runs:/fb68c9cf61344e9193980a7d73a1a8fc/artifacts/Lasso
+  model_version: '16'
+  run_id: fb68c9cf61344e9193980a7d73a1a8fc
+  run_name: Lasso_20250609_1132
+  start_time: 1749448951676
   status: RUNNING
   tracking_uri: http://127.0.0.1:5000
 model: Lasso
-saved_model_path: D:\Stock_Prediction\Tuned_Model\Lasso_model_20250610_1348.joblib
+saved_model_path: D:\Stock_Prediction\Tuned_Model\Lasso_model_20250609_1132.joblib
 scores:
   test:
-    adjusted_r2: 0.9235006390151848
-    mae: 169.22157158559062
-    r2: 0.930817969196341
-    rmse: 225.60469153789202
+    adjusted_r2: 0.9229042891470945
+    mae: 170.00362228270595
+    r2: 0.9303108639888584
+    rmse: 226.3204504188333
   train:
-    adjusted_r2: 0.9936475889490459
-    mae: 107.62125060785975
-    r2: 0.9938513105862485
-    rmse: 149.537231632139
+    adjusted_r2: 0.9936448307624982
+    mae: 107.63435876417499
+    r2: 0.993848640854663
+    rmse: 149.56969228494984
   val:
-    adjusted_r2: 0.9805937635377827
-    mae: 115.21620330603668
-    r2: 0.9824662951262423
-    rmse: 176.12462926254366
-timestamp: '20250610_1348'
+    adjusted_r2: 0.980590145488301
+    mae: 115.25220721849563
+    r2: 0.9824630261867983
+    rmse: 176.14104661185448
+timestamp: '20250609_1132'
