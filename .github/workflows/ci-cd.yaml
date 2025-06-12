@@ -14,6 +14,7 @@ env:
   DAGSHUB_TOKEN: ${{ secrets.DAGSHUB_TOKEN }}
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+  GH_PAT: ${{ secrets.GH_PAT }}
   MLFLOW_TRACKING_URI: https://dagshub.com/${{ secrets.DAGSHUB_USERNAME }}/market_predictor_mlops.mlflow
 
 jobs:
@@ -41,12 +42,6 @@ jobs:
           pip install -r app_requirements.txt
           pip install -r requirements.txt || true
 
-      - name: Configure DVC Remote (DagsHub)
-        run: |
-          dvc remote add origin https://dagshub.com/${DAGSHUB_USERNAME}/market_predictor_mlops.dvc
-          dvc remote modify origin user $DAGSHUB_USERNAME
-          dvc remote modify origin password $DAGSHUB_TOKEN
-
       - name: Run Model Training
         run: python main.py
 
@@ -60,6 +55,19 @@ jobs:
           git rm --cached Tuned_Model/mlflow_details.yaml
           git rm --cached Tuned_Model/time_series_predictions.yaml
 
+      - name: Configure Git Credentials
+        run: |
+          git config --global user.name "anp102618"
+          git config --global user.email "a.n.prasad155@gmail.com"
+          git remote set-url origin https://anp102618:${{ secrets.GH_PAT }}@github.com/anp102618/market_predictor_mlops.git
+
+      - name: Setup DVC Remote with DagsHub Auth
+        run: |
+          dvc remote modify origin url https://dagshub.com/${{ secrets.DAGSHUB_USERNAME }}/market_predictor_mlops.dvc
+          dvc remote modify origin user ${{ secrets.DAGSHUB_USERNAME }}
+          dvc remote modify origin password ${{ secrets.DAGSHUB_TOKEN }}
+
+
       - name: Track Artifacts with DVC & Push to DagsHub
         run: |
           dvc add Data/processed_data/final_data.csv
@@ -67,7 +75,7 @@ jobs:
           dvc add Tuned_Model/mlflow_details.yaml
           dvc add Tuned_Model/time_series_predictions.yaml
           git add .
-          git commit -m "Auto: Switch final_data.csv from Git to DVC"
+          git commit -m "Auto: Switch final_data.csv from Git to DVC" || echo "No changes to commit"
           git push origin main
           dvc push
 
