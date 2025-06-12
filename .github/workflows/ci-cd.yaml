@@ -74,6 +74,13 @@ jobs:
         run: |
           git pull origin main --rebase
 
+      - name: Untrack DVC Files from Git
+        run: |
+          git rm --cached Data/processed_data/final_data.csv || true
+          git rm --cached Tuned_Model/model.joblib || true
+          git rm --cached Tuned_Model/mlflow_details.yaml || true
+          git rm --cached Tuned_Model/time_series_predictions.yaml || true
+            
       - name: Track Artifacts with DVC & Push to DagsHub
         run: |
           # Enable auto-staging so git add is not needed
