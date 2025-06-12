@@ -63,7 +63,7 @@ def safe_log_metrics(metrics: dict, prefix: str):
 def execute_mlflow_steps():
     try:
         MLFLOW_TRACKING_URI = os.environ.get("MLFLOW_TRACKING_URI")
-        dagshub.init(repo_owner="anp102618", repo_name="market_predictor_mlops", mlflow=True)
+     #   dagshub.init(repo_owner="anp102618", repo_name="market_predictor_mlops", mlflow=True)
         # Set tracking URI
         mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
         timestamp = datetime.now().strftime("%Y%m%d_%H%M")
