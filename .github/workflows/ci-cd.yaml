@@ -49,7 +49,7 @@ jobs:
       - name: Run Experiment Tracking (DagsHub MLflow)
         run: python src/Experiment_Tracking_Prediction.py
 
-      - name: delink with Git to DVC
+      - name: delink files with Git to DVC
         run: |
           git rm --cached Data/processed_data/final_data.csv
           git rm --cached Tuned_Model/model.joblib
