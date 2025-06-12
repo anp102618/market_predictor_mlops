@@ -59,11 +59,11 @@ jobs:
 
       - name: Setup DVC Remote with DagsHub Auth
         run: |
-          dvc remote add -d dags_hub https://dagshub.com/${{ secrets.DAGSHUB_USERNAME }}/market_predictor_mlops.dvc
+          dvc remote add -f -d dags_hub https://dagshub.com/${{ secrets.DAGSHUB_USERNAME }}/market_predictor_mlops.dvc
           dvc remote modify dags_hub auth basic
           dvc remote modify dags_hub user ${{ secrets.DAGSHUB_USERNAME }}
           dvc remote modify dags_hub password ${{ secrets.DAGSHUB_TOKEN }}
-          dvc remote default dags_hub
+          
       
       - name: Clean Git Workspace Before Pull
         run: |
