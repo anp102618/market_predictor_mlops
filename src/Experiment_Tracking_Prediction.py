@@ -22,7 +22,6 @@ from Model_Utils.time_series_models import time_series_forecasts, add_average_to
 
 
 # ------------------ Load Environment ------------------ 
-#dagshub.init(repo_owner="anp102618", repo_name="market_predictor_mlops", mlflow=True)
 logger = setup_logger(filename="logs")
 config = load_yaml("Config_Yaml/model_config.yaml")
 

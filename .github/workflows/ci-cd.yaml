@@ -53,6 +53,13 @@ jobs:
       - name: Run Experiment Tracking (DagsHub MLflow)
         run: python src/Experiment_Tracking_Prediction.py
 
+      - name: Switch final_data.csv from Git to DVC
+        run: |
+          git rm --cached Data/processed_data/final_data.csv
+          git rm --cached Tuned_Model/model.joblib
+          git rm --cached Tuned_Model/mlflow_details.yaml
+          git rm --cached Tuned_Model/time_series_predictions.yaml
+
       - name: Track Artifacts with DVC & Push to DagsHub
         run: |
           dvc add Data/processed_data/final_data.csv
@@ -63,9 +70,16 @@ jobs:
           git config --global user.name "anp102618"
           git config --global user.email "a.n.prasad155@gmail.com"
           git add .
-          git commit -m "Auto: Tracked artifacts with DVC" || echo "No changes to commit"
+          git commit -m "Auto: Switch final_data.csv from Git to DVC"
           git push origin main
           dvc push
+
+      - name: Pull Artifacts for Testing
+        run: |
+          dvc pull Data/processed_data/final_data.csv
+          dvc pull Tuned_Model/model.joblib
+          dvc pull Tuned_Model/mlflow_details.yaml
+          dvc pull Tuned_Model/time_series_predictions.yaml
 
       - name: Run Model Promotion Test
         run: python -m unittest Test_Script/test.py
