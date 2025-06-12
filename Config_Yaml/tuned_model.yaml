@@ -5,41 +5,41 @@ Lasso:
     max_iter: 1000
   scores:
     train:
-      rmse: 150.4139
-      mae: 108.5025
+      rmse: 150.3746
+      mae: 108.4988
       r2: 0.9938
       adjusted_r2: 0.9936
     val:
-      rmse: 168.9832
-      mae: 110.7105
-      r2: 0.9839
-      adjusted_r2: 0.9821
+      rmse: 168.852
+      mae: 110.3876
+      r2: 0.984
+      adjusted_r2: 0.9823
     test:
-      rmse: 225.6047
-      mae: 169.2216
-      r2: 0.9308
-      adjusted_r2: 0.9235
+      rmse: 225.4317
+      mae: 169.2169
+      r2: 0.9312
+      adjusted_r2: 0.924
 Ridge:
   model: Ridge
   params:
     alpha: 0.1
-    solver: auto
+    solver: lsqr
   scores:
     train:
-      rmse: 150.4672
-      mae: 108.6389
+      rmse: 150.4337
+      mae: 108.608
       r2: 0.9938
       adjusted_r2: 0.9936
     val:
-      rmse: 168.802
-      mae: 110.4522
-      r2: 0.9839
-      adjusted_r2: 0.9822
+      rmse: 168.658
+      mae: 110.1098
+      r2: 0.9841
+      adjusted_r2: 0.9824
     test:
-      rmse: 228.1384
-      mae: 171.261
-      r2: 0.9293
-      adjusted_r2: 0.9218
+      rmse: 228.0654
+      mae: 171.3416
+      r2: 0.9296
+      adjusted_r2: 0.9222
 XGBRegressor:
   model: XGBRegressor
   params:
@@ -53,44 +53,17 @@ XGBRegressor:
     reg_lambda: 1.5
   scores:
     train:
-      rmse: 81.3844
-      mae: 61.9627
+      rmse: 80.1354
+      mae: 61.4207
       r2: 0.9982
-      adjusted_r2: 0.9981
+      adjusted_r2: 0.9982
     val:
-      rmse: 76.7314
-      mae: 56.8245
-      r2: 0.9967
-      adjusted_r2: 0.9963
+      rmse: 77.833
+      mae: 59.3049
+      r2: 0.9966
+      adjusted_r2: 0.9962
     test:
-      rmse: 1263.4411
-      mae: 1071.88
-      r2: -1.1697
-      adjusted_r2: -1.3992
-Sequential:
-  model: Sequential
-  params:
-    units: 64
-    dropout: 0.0
-    recurrent_dropout: 0.0
-    optimizer: adam
-    learning_rate: 0.01
-    batch_size: 16
-    epochs: 10
-    bidirectional: false
-  scores:
-    train:
-      rmse: 16175.4074
-      mae: 16062.5973
-      r2: -70.944
-      adjusted_r2: -73.3276
-    val:
-      rmse: 20699.4575
-      mae: 20656.679
-      r2: -241.1873
-      adjusted_r2: -267.052
-    test:
-      rmse: 23791.7388
-      mae: 23776.2724
-      r2: -768.3951
-      adjusted_r2: -849.7734
+      rmse: 1329.0998
+      mae: 1137.3368
+      r2: -1.391
+      adjusted_r2: -1.6427
