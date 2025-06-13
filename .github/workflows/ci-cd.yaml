@@ -87,11 +87,11 @@ jobs:
           dvc remote default origin_remote
 
       - name: DVC Push
-        run: dvc exp push
+        run: dvc exp push origin main
 
       - name: Pull Artifacts for Testing
         run: |
-          dvc exp pull
+          dvc exp pull origin main
 
       - name: Run Model Promotion Test
         run: python -m unittest Test_Script/test.py
