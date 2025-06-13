@@ -21,9 +21,9 @@ env:
 jobs:
 
   ######################################
-  # 1. Train, Track, and Test the Model
+  # 1. Train, Track, Test , deploy the Model
   ######################################
-  build-train-test:
+  build-train-test-deploy:
     runs-on: ubuntu-latest
     outputs:
       promotion_status: ${{ steps.promotion.outputs.status }}
@@ -104,16 +104,6 @@ jobs:
       - name: Run Model Promotion Test
         run: python -m unittest Test_Script/test_model_promotion.py
 
-  ###################################################
-  # 2. Docker Build & Push (Only If Promotion Passed)
-  ###################################################
-  docker-deploy:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
       - name: Log in to DockerHub
         uses: docker/login-action@v3
         with:
@@ -122,5 +112,5 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t $DOCKERHUB_USERNAME/market_prediction_app:latest .
-          docker push $DOCKERHUB_USERNAME/market_prediction_app:latest
+          docker build -t $DOCKERHUB_USERNAME/market_prediction_app:$TAG .
+          docker push $DOCKERHUB_USERNAME/market_prediction_app:$TAG
