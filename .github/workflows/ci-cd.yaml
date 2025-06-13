@@ -85,9 +85,13 @@ jobs:
           dvc remote modify origin_remote user ${{ secrets.DAGSHUB_USERNAME }}
           dvc remote modify origin_remote password ${{ secrets.DAGSHUB_TOKEN }}
           dvc remote default origin_remote
+      
+      - name: Run Named Experiment
+        run: |
+          dvc exp run --name ci_exp_run
 
       - name: DVC Push
-        run: dvc exp push origin ac65c1a
+        run: dvc exp push origin ci_exp_run
 
       - name: Pull Artifacts for Testing
         run: |
