@@ -63,15 +63,21 @@ jobs:
           git config --global user.name "anp102618"
           git config --global user.email "a.n.prasad155@gmail.com"
 
-      - name: Set up DVC Remote (DagsHub)
+      - name: Configure DVC Remote
         run: |
-          dvc remote add origin_remote https://dagshub.com/anp102618/market_predictor_mlops.dvc
-          dvc remote modify origin_remote user ${{ secrets.DAGSHUB_USERNAME }}
-          dvc remote modify origin_remote password ${{ secrets.DAGSHUB_TOKEN }}
-          dvc remote default origin_remote
+          dvc remote add -d origin_remote https://dagshub.com/${DAGSHUB_USERNAME}/market_predictor_mlops.dvc
+          dvc remote modify origin_remote auth basic
+          dvc remote modify --local origin_remote user ${DAGSHUB_USERNAME}
+          dvc remote modify --local origin_remote password ${DAGSHUB_TOKEN}
+          
+      - name: Debug DVC remote config
+        run: |
+          cat .dvc/config
+          dvc remote list --verbose
 
       - name: Enable DVC Auto-Staging
-        run: dvc config core.autostage true
+        run: |
+          dvc config core.autostage true
 
       - name: Add Files to DVC
         run: |
