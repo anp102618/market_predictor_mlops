@@ -87,7 +87,8 @@ jobs:
           git push origin main
 
       - name: DVC Push
-        run: dvc pushn
+        run: |
+          dvc push
 
       - name: Pull Artifacts for Testing
         run: |
