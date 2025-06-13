@@ -63,6 +63,13 @@ jobs:
           git config --global user.name "anp102618"
           git config --global user.email "a.n.prasad155@gmail.com"
 
+      - name: Set up DVC Remote (DagsHub)
+        run: |
+          dvc remote add origin_remote https://dagshub.com/anp102618/market_predictor_mlops.dvc
+          dvc remote modify origin_remote user ${{ secrets.DAGSHUB_USERNAME }}
+          dvc remote modify origin_remote password ${{ secrets.DAGSHUB_TOKEN }}
+          dvc remote default origin_remote
+
       - name: Enable DVC Auto-Staging
         run: dvc config core.autostage true
 
@@ -79,23 +86,12 @@ jobs:
           git commit -m "Auto: Track data/model artifacts with DVC" || echo "Nothing to commit"
           git push origin main
 
-      - name: Set up DVC Remote (DagsHub)
-        run: |
-          dvc remote add origin_remote https://dagshub.com/anp102618/market_predictor_mlops.dvc
-          dvc remote modify origin_remote user ${{ secrets.DAGSHUB_USERNAME }}
-          dvc remote modify origin_remote password ${{ secrets.DAGSHUB_TOKEN }}
-          dvc remote default origin_remote
-      
-      - name: Run Named Experiment
-        run: |
-          dvc exp run --name ci_exp_run
-
       - name: DVC Push
-        run: dvc exp push origin ci_exp_run
+        run: dvc pushn
 
       - name: Pull Artifacts for Testing
         run: |
-          dvc exp pull origin ac65c1a
+          dvc pull
 
       - name: Run Model Promotion Test
         run: python -m unittest Test_Script/test.py
