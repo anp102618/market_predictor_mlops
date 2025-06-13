@@ -52,7 +52,7 @@ jobs:
         #run: python src/Experiment_Tracking_Prediction.py
         run: python src/ETP.py
 
-      - name: 🔌 Delink Artifacts from Git (for DVC tracking)
+      - name: Delink Artifacts from Git (for DVC tracking)
         run: |
           git rm --cached Data/processed_data/final_data.csv || true
           git rm --cached Tuned_Model/model.joblib || true
@@ -104,6 +104,11 @@ jobs:
       - name: Run Model Promotion Test
         run: python -m unittest Test_Script/test_model_promotion.py
 
+      - name: Set Timestamp Tag
+        id: timestamp
+        run: echo "TAG=$(date +'%Y%m%d%H%M%S')" >> "$GITHUB_OUTPUT"
+
+
       - name: Log in to DockerHub
         uses: docker/login-action@v3
         with:
@@ -112,5 +117,5 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t $DOCKERHUB_USERNAME/market_prediction_app:$TAG .
-          docker push $DOCKERHUB_USERNAME/market_prediction_app:$TAG
+          docker build -t $DOCKERHUB_USERNAME/market_prediction_app:${{ steps.timestamp.outputs.TAG }} .
+          docker push $DOCKERHUB_USERNAME/market_prediction_app:${{ steps.timestamp.outputs.TAG }}

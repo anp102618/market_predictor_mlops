@@ -127,16 +127,6 @@ def execute_mlflow_steps():
             delete_joblib_model(model_path.parent)
             joblib.dump(model, model_path)
 
-            # Log model as MLflow artifact
-            signature = infer_signature(X_train, model.predict(X_train))
-            mlflow.sklearn.log_model(
-                sk_model=model,
-                artifact_path="model",  # consistent naming
-                input_example=X_train.iloc[:1],
-                signature=signature
-            )
-            logger.info("Model artifact logged to MLflow.")
-
             # Save metadata (no registry)
             model_uri = f"runs:/{run_id}/model"
             metadata = {
