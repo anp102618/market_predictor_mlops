@@ -19,9 +19,9 @@ def execute_pipeline():
         
         execute_files_backup()
         execute_data_ingestion()
-        execute_data_validation()
-        execute_data_preprocessing()
-        execute_model_tune_evaluate()
+        #execute_data_validation()
+        #execute_data_preprocessing()
+        #execute_model_tune_evaluate()
         logger.info("End to End ML pipeline execution completed successfully...")
 
     except CustomException as e:

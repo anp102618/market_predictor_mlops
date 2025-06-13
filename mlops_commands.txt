@@ -324,3 +324,7 @@ jobs:
         run: |
           docker build -t $DOCKERHUB_USERNAME/stock_prediction_app:latest .
           docker push $DOCKERHUB_USERNAME/stock_prediction_app:latest
+          
+/config.local
+/tmp
+/cache
