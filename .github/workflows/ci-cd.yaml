@@ -102,7 +102,7 @@ jobs:
           dvc pull
 
       - name: Run Model Promotion Test
-        run: python -m unittest Test_Script/test.py
+        run: python -m unittest Test_Script/test_model_promotion.py
 
       - name: Check for Promotion Success
         id: promotion

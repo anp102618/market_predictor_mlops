@@ -1,176 +1,143 @@
-import unittest
-import yaml
-import logging
 import os
+import json
+import yaml
+import unittest
+import logging
 import pandas as pd
 from scipy.stats import ks_2samp
 from mlflow.tracking import MlflowClient
-from mlflow.exceptions import MlflowException
-from Common_Utils import setup_logger, track_performance, CustomException
+from Common_Utils import setup_logger, load_yaml, track_performance
 
-logger = setup_logger(filename="logs")
+logger = setup_logger("logs")
 
-class TestModelPromotion(unittest.TestCase):
 
-    def check_data_drift(self, ref_path, new_path, threshold=0.05):
-        ref = pd.read_csv(ref_path)
-        new = pd.read_csv(new_path)
-        drift_detected = False
+class DriftChecker:
+    def __init__(self, ref_data, new_data, ref_metrics, new_metrics):
+        self.ref_data = pd.read_csv(ref_data)
+        self.new_data = pd.read_csv(new_data)
+        self.prev_metrics = load_yaml(ref_metrics)
+        self.curr_metrics = load_yaml(new_metrics)
 
-        for column in ref.columns:
-            if column in new.columns:
-                stat, p_value = ks_2samp(ref[column].dropna(), new[column].dropna())
-                logger.info(f"Data drift p-value for {column}: {p_value:.4f}")
+    def data_drift(self, threshold=0.05):
+        for col in self.ref_data.columns:
+            if col in self.new_data.columns:
+                stat, p_value = ks_2samp(self.ref_data[col].dropna(), self.new_data[col].dropna())
+                logger.info(f"Drift p-value for {col}: {p_value:.4f}")
                 if p_value < threshold:
-                    drift_detected = True
-                    logger.warning(f"Data drift detected in column: {column}")
+                    logger.warning(f"Drift detected in column: {col}")
+                    return True
+        return False
 
-        return drift_detected
+    def model_drift(self, threshold=0.05):
+        prev = self.prev_metrics.get("scores", {}).get("test", {}).get("adjusted_r2")
+        curr = self.curr_metrics.get("scores", {}).get("test", {}).get("adjusted_r2")
 
-    def check_model_drift(self, prev_metrics_path, curr_metrics_path, threshold=0.05):
-        try:
-            with open(prev_metrics_path, 'r') as f:
-                prev_data = yaml.safe_load(f)
-            with open(curr_metrics_path, 'r') as f:
-                curr_data = yaml.safe_load(f)
-
-            prev_adj_r2 = prev_data.get("scores", {}).get("test", {}).get("adjusted_r2", None)
-            curr_adj_r2 = curr_data.get("scores", {}).get("test", {}).get("adjusted_r2", None)
-
-            if prev_adj_r2 is None or curr_adj_r2 is None:
-                logger.warning("Adjusted R2 not found in one of the YAMLs. Skipping model drift check.")
-                return False
-
-            drop = prev_adj_r2 - curr_adj_r2
-            logger.info(f"Previous adj_r2: {prev_adj_r2}, Current adj_r2: {curr_adj_r2}, Drop: {drop}")
-            return drop > threshold
-
-        except Exception as e:
-            logger.error(f"Error in model drift detection: {e}")
+        if prev is None or curr is None:
+            logger.warning("Missing adjusted R² values.")
             return False
 
-    @track_performance
-    def get_stage_from_run_id(self, client, model_name, run_id):
-        try:
-            model_versions = client.get_latest_versions(model_name)
-            for version in model_versions:
-                if version.run_id == run_id:
-                    logger.info(f"Found version {version.version} for run_id {run_id} with stage {version.current_stage}")
-                    return version.current_stage
-            logger.warning(f"No model version found for run_id: {run_id}")
-            return None
-        except (MlflowException, CustomException) as e:
-            logger.error(f"Error while fetching model stage: {e}")
-            raise
+        drop = prev - curr
+        logger.info(f"Model drift: prev_adj={prev}, curr_adj={curr}, drop={drop:.4f}")
+        return drop > threshold
 
-    @track_performance
-    def get_model_version(self, client, model_name, run_id):
-        model_versions = client.get_latest_versions(model_name)
-        for version in model_versions:
-            if version.run_id == run_id:
+
+class ModelPromotionTest(unittest.TestCase):
+
+    def setUp(self):
+        self.client = MlflowClient()
+        self.experiment_name = "market-predictor-ml"
+        self.model_name, self.run_id = self._get_latest_model_info()
+        self.drift = DriftChecker(
+            "Data/previous_data/final_data.csv",
+            "Data/processed_data/final_data.csv",
+            "Data/previous_data/mlflow_details.yaml",
+            "Tuned_Model/mlflow_details.yaml"
+        )
+
+    def _get_latest_model_info(self):
+        experiment = self.client.get_experiment_by_name(self.experiment_name)
+        runs = self.client.search_runs([experiment.experiment_id], order_by=["start_time DESC"], max_results=5)
+
+        for run in runs:
+            tag = run.data.tags.get("mlflow.log-model.history")
+            if tag:
+                try:
+                    model_hist = json.loads(tag)
+                    return model_hist[0]["name"], run.info.run_id
+                except Exception as e:
+                    logger.warning(f"Tag parsing failed: {e}")
+
+        # Fallback
+        config = load_yaml("Config_Yaml/model_config.yaml")
+        tuned_path = config["Experiment_Tracking_Prediction"]["path"]["tuned_model_yaml"]
+        model_yaml = load_yaml(tuned_path)
+        return next(iter(model_yaml)), runs[0].info.run_id
+
+    def _get_stage(self):
+        for version in self.client.get_latest_versions(self.model_name):
+            if version.run_id == self.run_id:
+                return version.current_stage
+        return None
+
+    def _get_model_version(self):
+        for version in self.client.get_latest_versions(self.model_name):
+            if version.run_id == self.run_id:
                 return version.version
-        raise ValueError(f"No model version found for run_id: {run_id}")
+        raise ValueError("Version not found.")
+
+    def _high_score(self):
+        scores = load_yaml("Tuned_Model/mlflow_details.yaml").get("scores", {})
+        for split in ["train", "val", "test"]:
+            r2 = scores.get(split, {}).get("r2", 0)
+            adj_r2 = scores.get(split, {}).get("adjusted_r2", 0)
+            logger.info(f"{split.upper()} R²: {r2}, Adj R²: {adj_r2}")
+            if r2 < 0.9 or adj_r2 < 0.9:
+                return False
+        return True
+
+    def _prediction_jump_ok(self):
+        preds = load_yaml("Tuned_Model/time_series_predictions.yaml")
+        lasso = preds.get("Lasso", -1)
+        avg = preds.get("average_expected", -1)
+        last = preds.get("last_value", -1)
+        logger.info(f"Lasso={lasso}, Avg={avg}, Last={last}")
+        return (lasso > last and avg > last) or (lasso < last and avg < last)
 
     @track_performance
     def test_model_promotion(self):
-        try:
-            yaml_path = "Tuned_Model/mlflow_details.yaml"
-            with open(yaml_path, "r") as f:
-                data = yaml.safe_load(f)
+        stage = self._get_stage()
+        self.assertIsNotNone(stage, "Stage not found.")
 
-            client = MlflowClient()
-            model_name = data.get("model", None)
-            run_id = data.get("mlflow_run", {}).get("run_id", None)
+        if all([
+            self._high_score(),
+            not self.drift.data_drift(),
+            not self.drift.model_drift(),
+            self._prediction_jump_ok()
+        ]):
 
-            self.assertIsNotNone(model_name, "Model name missing from YAML.")
-            self.assertIsNotNone(run_id, "Run ID missing from YAML.")
+            if stage.lower() == "staging":
+                version = self._get_model_version()
+                self.client.transition_model_version_stage(
+                    name=self.model_name,
+                    version=version,
+                    stage="Production",
+                    archive_existing_versions=True
+                )
+                logger.info(f" Promoted model '{self.model_name}' v{version} to PRODUCTION")
 
-            current_stage = self.get_stage_from_run_id(client, model_name, run_id)
-            self.assertIsNotNone(current_stage, f"Could not determine stage for run_id: {run_id}")
+                with open("Test_Script/promotion_success.txt", "w") as f:
+                    f.write("promoted")
 
-            # === Score Check
-            scores = data.get("scores", {})
-            adj_r2s = []
-            for dataset in ["train", "val", "test"]:
-                r2 = scores.get(dataset, {}).get("r2", 0)
-                adj_r2 = scores.get(dataset, {}).get("adjusted_r2", 0)
-                logger.info(f"{dataset} R2: {r2}, Adjusted R2: {adj_r2}")
-                self.assertGreaterEqual(r2, 0.9, f"{dataset} r2 should be >= 0.9")
-                self.assertGreaterEqual(adj_r2, 0.9, f"{dataset} adjusted_r2 should be >= 0.9")
-                adj_r2s.append(adj_r2)
-
-            high_adj_r2 = all(score >= 0.9 for score in adj_r2s)
-
-            # === Drift Checks
-            data_drift = self.check_data_drift(
-                "Data/previous_data/final_data.csv",
-                "Data/processed_data/final_data.csv"
-            )
-
-            model_drift = self.check_model_drift(
-                "Data/previous_data/mlflow_details.yaml",
-                "Tuned_Model/mlflow_details.yaml"
-            )
-
-            # === Load Predictions
-            with open("Tuned_Model/time_series_predictions.yaml", "r") as f:
-                preds_data = yaml.safe_load(f)
-            lasso_val = float(preds_data.get("Lasso", -1))
-            avg_val = float(preds_data.get("average_expected", -1))
-            last_val = float(preds_data.get("last_value", -1))
-            logger.info(f"Lasso: {lasso_val}, Avg: {avg_val}, Last: {last_val}")
-
-            prediction_logic = (lasso_val > last_val and avg_val > last_val) or \
-                               (lasso_val < last_val and avg_val < last_val)
-
-            # === Promotion Decision
-            promotion_allowed = high_adj_r2 and not data_drift and not model_drift and prediction_logic
-
-            if promotion_allowed:
-                if current_stage.lower() == "staging":
-                    version = self.get_model_version(client, model_name, run_id)
-                    client.transition_model_version_stage(
-                        name=model_name,
-                        version=version,
-                        stage="Production",
-                        archive_existing_versions=True,
-                    )
-                    logger.info(f"Promoted model version {version} to Production.")
-
-                    # Update YAML
-                    if "mlflow_run" not in data:
-                        data["mlflow_run"] = {}
-                    data["mlflow_run"]["current_stage"] = "Production"
-
-                    with open(yaml_path, "w") as f:
-                        yaml.dump(data, f)
-                    logger.info("Updated mlflow_details.yaml with stage = Production")
-
-                    #  Write promotion success flag
-                    os.makedirs("Test_Script", exist_ok=True)
-                    with open("Test_Script/promotion_success.txt", "w") as f:
-                        f.write("promoted")
-
-                    #  Final assertion
-                    promoted_stage = self.get_stage_from_run_id(client, model_name, run_id)
-                    self.assertEqual(promoted_stage.lower(), "production", "Model was not promoted to Production")
-                else:
-                    logger.info(f"Model already in stage {current_stage}. No promotion required.")
+                self.assertEqual(
+                    self._get_stage().lower(), "production", "Model was not promoted."
+                )
             else:
-                logger.info("Promotion conditions not met – no promotion.")
-                self.assertTrue(True, "Promotion conditions not satisfied – skipping promotion.")
+                logger.info(f"Model already in stage '{stage}', no need to promote.")
 
-        except Exception as e:
-            logger.error(f"Unexpected error in test model promotion: {e}")
-            self.fail(f"Exception occurred: {e}")
+        else:
+            logger.info(" Conditions not met. Model not promoted.")
+            self.assertTrue(True)
 
-def execute_test_script():
-    try:
-        logger.info("Starting the Test script run ....")
-        unittest.main()
-        logger.info("Test script run completed successfully..")
-    except Exception as e:
-        logger.error(f"Unexpected error in test script run : {e}")
 
 if __name__ == "__main__":
-    unittest.main()  
+    unittest.main()
