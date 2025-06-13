@@ -58,31 +58,36 @@ jobs:
           git rm --cached Tuned_Model/mlflow_details.yaml || true
           git rm --cached Tuned_Model/time_series_predictions.yaml || true
 
-      - name: Configure Git Credentials
+      - name: Configure Git
         run: |
           git config --global user.name "anp102618"
           git config --global user.email "a.n.prasad155@gmail.com"
-          git remote set-url origin https://anp102618:${{ secrets.GH_TOKEN }}@github.com/anp102618/market_predictor_mlops.git
 
-      - name: Set up DVC Remote (DagsHub)
-        run: |
-          dvc remote add --global origin https://dagshub.com/${{ secrets.DAGSHUB_USERNAME }}/market_predictor_mlops.dvc
-          dvc remote modify --global origin user ${{ secrets.DAGSHUB_USERNAME }}
-          dvc remote modify --global origin password ${{ secrets.DAGSHUB_TOKEN }}
+      - name: Enable DVC Auto-Staging
+        run: dvc config core.autostage true
 
-      - name: Track & Push Artifacts with DVC
+      - name: Add Files to DVC
         run: |
           dvc add Data/processed_data/final_data.csv
           dvc add Tuned_Model/model.joblib
           dvc add Tuned_Model/mlflow_details.yaml
           dvc add Tuned_Model/time_series_predictions.yaml
 
-          git add .
-          git pull origin main --rebase || echo "No rebase required"
-          git diff-index --quiet HEAD || git commit -m "Auto: Track artifacts with DVC"
-          
+      - name: Git Add & Commit DVC Files
+        run: |
+          git add Data/processed_data/*.dvc Tuned_Model/*.dvc .gitignore
+          git commit -m "Auto: Track data/model artifacts with DVC" || echo "Nothing to commit"
           git push origin main
-          dvc push
+
+      - name: Set up DVC Remote (DagsHub)
+        run: |
+          dvc remote add origin_remote https://dagshub.com/anp102618/market_predictor_mlops.dvc
+          dvc remote modify origin_remote user ${{ secrets.DAGSHUB_USERNAME }}
+          dvc remote modify origin_remote password ${{ secrets.DAGSHUB_TOKEN }}
+          dvc remote default origin_remote
+
+      - name: DVC Push
+        run: dvc push
 
       - name: Pull Artifacts for Testing
         run: |
