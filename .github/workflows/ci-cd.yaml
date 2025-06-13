@@ -65,7 +65,7 @@ jobs:
 
       - name: Configure DVC Remote
         run: |
-          dvc remote add -d origin_remote https://dagshub.com/${DAGSHUB_USERNAME}/market_predictor_mlops.dvc
+          dvc remote add -d -f origin_remote https://dagshub.com/${DAGSHUB_USERNAME}/market_predictor_mlops.dvc
           dvc remote modify origin_remote auth basic
           dvc remote modify --local origin_remote user ${DAGSHUB_USERNAME}
           dvc remote modify --local origin_remote password ${DAGSHUB_TOKEN}
