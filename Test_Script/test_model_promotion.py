@@ -6,11 +6,14 @@ import logging
 import mlflow
 import pandas as pd
 from scipy.stats import ks_2samp
-from mlflow.tracking import MlflowClient
 from Common_Utils import setup_logger, load_yaml, track_performance
 
 MLFLOW_TRACKING_URI = os.environ.get("MLFLOW_TRACKING_URI")
 mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
+from mlflow.tracking import MlflowClient
+
+experiment = client.get_experiment_by_name("market-predictor-ml")
+print(experiment)
 
 logger = setup_logger("logs")
 
@@ -60,6 +63,7 @@ class ModelPromotionTest(unittest.TestCase):
 
     def _get_latest_model_info(self):
         experiment = self.client.get_experiment_by_name(self.experiment_name)
+        print(f"experiment is :{experiment}")
         runs = self.client.search_runs([experiment.experiment_id], order_by=["start_time DESC"], max_results=5)
 
         for run in runs:
