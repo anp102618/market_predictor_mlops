@@ -3,10 +3,14 @@ import json
 import yaml
 import unittest
 import logging
+import mlflow
 import pandas as pd
 from scipy.stats import ks_2samp
 from mlflow.tracking import MlflowClient
 from Common_Utils import setup_logger, load_yaml, track_performance
+
+MLFLOW_TRACKING_URI = os.environ.get("MLFLOW_TRACKING_URI")
+mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
 
 logger = setup_logger("logs")
 
