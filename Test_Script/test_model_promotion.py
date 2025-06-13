@@ -8,13 +8,6 @@ import pandas as pd
 from scipy.stats import ks_2samp
 from Common_Utils import setup_logger, load_yaml, track_performance
 
-MLFLOW_TRACKING_URI = os.environ.get("MLFLOW_TRACKING_URI")
-mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
-from mlflow.tracking import MlflowClient
-
-experiment = client.get_experiment_by_name("market-predictor-ml")
-print(experiment)
-
 logger = setup_logger("logs")
 
 
@@ -51,6 +44,9 @@ class DriftChecker:
 class ModelPromotionTest(unittest.TestCase):
 
     def setUp(self):
+        MLFLOW_TRACKING_URI = os.environ.get("MLFLOW_TRACKING_URI")
+        mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
+        from mlflow.tracking import MlflowClient
         self.client = MlflowClient()
         self.experiment_name = "market-predictor-ml"
         self.model_name, self.run_id = self._get_latest_model_info()
