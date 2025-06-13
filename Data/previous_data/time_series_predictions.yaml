@@ -1,7 +1,7 @@
-ARIMA: 25104.87
-GBM: 25540.82
-Lasso: 25206.400652240627
-Prophet: 24656.64
-VAR: 25100.81
-average_expected: 25121.91
-last_value: 25104.25
+ARIMA: 25142.0
+GBM: 25591.15
+Lasso: 25210.734384456344
+Prophet: 24667.46
+VAR: 25131.89
+average_expected: 25148.65
+last_value: 25141.4
