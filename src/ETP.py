@@ -121,33 +121,24 @@ def execute_mlflow_steps():
             append_yaml(time_series_yaml, {"last_value": df_final['nsei'].iloc[-1]})
             add_average_to_yaml(time_series_yaml)
 
-            # Save and log model
+            # Save local model
             model_path = Path("Tuned_Model/model.joblib")
             model_path.parent.mkdir(parents=True, exist_ok=True)
             delete_joblib_model(model_path.parent)
             joblib.dump(model, model_path)
 
+            # Log model as MLflow artifact
             signature = infer_signature(X_train, model.predict(X_train))
-            mlflow.sklearn.log_model(model, artifact_path=model_name, input_example=X_train.iloc[:1], signature=signature)
+            mlflow.sklearn.log_model(
+                sk_model=model,
+                artifact_path="model",  # consistent naming
+                input_example=X_train.iloc[:1],
+                signature=signature
+            )
+            logger.info("Model artifact logged to MLflow.")
 
-            # Explicitly add model history tag
-            mlflow.set_tag("mlflow.log-model.history", json.dumps({
-                "run_id": run_id,
-                "artifact_path": model_name,
-                "flavors": ["sklearn"]
-            }))
-
-            # Register model
-            model_uri = f"runs:/{run_id}/{model_name}"
-            registered = mlflow.register_model(model_uri, model_name)
-            time.sleep(3)
-            model_version = registered.version
-            client = MlflowClient()
-            client.transition_model_version_stage(model_name, model_version, stage=STAGE, archive_existing_versions=True)
-            client.set_model_version_tag(model_name, model_version, "version_status", STAGE)
-            logger.info(f"Registered model '{model_name}' version {model_version} in stage '{STAGE}'")
-
-            # Save metadata
+            # Save metadata (no registry)
+            model_uri = f"runs:/{run_id}/model"
             metadata = {
                 "timestamp": datetime.now().strftime("%Y%m%d_%H%M"),
                 "model": model_name,
@@ -158,8 +149,6 @@ def execute_mlflow_steps():
                     "run_name": run_name,
                     "experiment_name": experiment_name,
                     "model_uri": model_uri,
-                    "model_version": model_version,
-                    "current_stage": STAGE,
                     "artifact_uri": run.info.artifact_uri,
                     "experiment_id": run.info.experiment_id,
                     "status": run.info.status,
