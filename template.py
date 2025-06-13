@@ -55,6 +55,14 @@ list_of_files = [
     f"prometheus/prometheus.yml",
     f"prometheus/prom_grafa.txt",
     
+    f"k8s/fastapi-deployment.yaml",
+    f"k8s/fastapi-service.yaml",
+    f"k8s/prometheus-configmap.yaml",
+    f"k8s/prometheus-deployment.yaml",
+    f"k8s/prometheus-service.yaml",
+    f"k8s/grafana-deployment.yaml",
+    f"k8s/grafana-service.yaml",
+
     "app.py",
     "requirements.txt",
     "app_requirements.txt",
@@ -63,10 +71,7 @@ list_of_files = [
     "Dockerfile",
     ".dockerignore",
     
- 
-
-
-]
+ ]
 
 
 for filepath in list_of_files:
