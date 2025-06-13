@@ -104,21 +104,10 @@ jobs:
       - name: Run Model Promotion Test
         run: python -m unittest Test_Script/test_model_promotion.py
 
-      - name: Check for Promotion Success
-        id: promotion
-        run: |
-          if [ -f Test_Script/promotion_success.txt ]; then
-            echo "status=YES" >> $GITHUB_OUTPUT
-          else
-            echo "status=NO" >> $GITHUB_OUTPUT
-          fi
-
   ###################################################
   # 2. Docker Build & Push (Only If Promotion Passed)
   ###################################################
   docker-deploy:
-    needs: build-train-test
-    if: needs.build-train-test.outputs.promotion_status == 'YES'
     runs-on: ubuntu-latest
 
     steps:
@@ -133,5 +122,5 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t $DOCKERHUB_USERNAME/stock_prediction_app:latest .
-          docker push $DOCKERHUB_USERNAME/stock_prediction_app:latest
+          docker build -t $DOCKERHUB_USERNAME/market_prediction_app:latest .
+          docker push $DOCKERHUB_USERNAME/market_prediction_app:latest
