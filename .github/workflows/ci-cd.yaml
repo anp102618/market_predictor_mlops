@@ -87,14 +87,11 @@ jobs:
           dvc remote default origin_remote
 
       - name: DVC Push
-        run: dvc push
+        run: dvc exp push
 
       - name: Pull Artifacts for Testing
         run: |
-          dvc pull Data/processed_data/final_data.csv
-          dvc pull Tuned_Model/model.joblib
-          dvc pull Tuned_Model/mlflow_details.yaml
-          dvc pull Tuned_Model/time_series_predictions.yaml
+          dvc exp pull
 
       - name: Run Model Promotion Test
         run: python -m unittest Test_Script/test.py
