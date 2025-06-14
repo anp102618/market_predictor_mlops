@@ -1,0 +1,42 @@
+[2025-06-13 22:09:25,995] 123 __init__.py - INFO - Loaded config from Config_Yaml/model_config.yaml
+[2025-06-13 22:09:25,996] 100 __init__.py - INFO - Running 'execute_mlflow_steps'...
+[2025-06-13 22:09:25,996] 67 Experiment_Tracking_Prediction.py - INFO - MLflow tracking URI set to: None
+[2025-06-13 22:09:26,028] 123 __init__.py - INFO - Loaded config from Config_Yaml\tuned_model.yaml
+[2025-06-13 22:09:26,047] 100 __init__.py - INFO - Running 'apply'...
+[2025-06-13 22:09:26,084] 85 feature_splitting_scaling.py - INFO - Successfully applied scaling and data splitting.
+[2025-06-13 22:09:26,084] 111 __init__.py - INFO - 'apply' completed in 0.0371 sec
+[2025-06-13 22:09:26,084] 112 __init__.py - INFO - Memory used: 1043.00 KB (peak: 1284.79 KB)
+[2025-06-13 22:09:26,091] 87 Experiment_Tracking_Prediction.py - INFO - Model fit completed.
+[2025-06-13 22:09:26,565] 98 Experiment_Tracking_Prediction.py - INFO - Started MLflow run: 7c984a0fcc054ad288dcd53edbbbcc24
+[2025-06-13 22:09:26,827] 100 __init__.py - INFO - Running 'time_series_forecasts'...
+[2025-06-13 22:09:26,843] 138 time_series_models.py - INFO -  final_df successfully read ito variable df 
+[2025-06-13 22:09:26,844] 100 __init__.py - INFO - Running 'forecast_next'...
+[2025-06-13 22:09:26,847] 111 __init__.py - INFO - 'forecast_next' completed in 0.0031 sec
+[2025-06-13 22:09:26,848] 112 __init__.py - INFO - Memory used: 331.38 KB (peak: 837.23 KB)
+[2025-06-13 22:09:26,870] 147 time_series_models.py - INFO - GBM forecast successfully completed
+[2025-06-13 22:09:26,987] 154 time_series_models.py - INFO - ARIMA forecast successfully completed
+[2025-06-13 22:09:26,987] 100 __init__.py - INFO - Running 'forecast_next'...
+[2025-06-13 22:09:28,388] 111 __init__.py - INFO - 'forecast_next' completed in 1.4008 sec
+[2025-06-13 22:09:28,388] 112 __init__.py - INFO - Memory used: 1184.97 KB (peak: 38529.78 KB)
+[2025-06-13 22:09:28,424] 161 time_series_models.py - INFO - Prophet forecast successfully completed
+[2025-06-13 22:09:28,424] 100 __init__.py - INFO - Running 'forecast_next'...
+[2025-06-13 22:09:28,567] 111 __init__.py - INFO - 'forecast_next' completed in 0.1421 sec
+[2025-06-13 22:09:28,567] 112 __init__.py - INFO - Memory used: 129.33 KB (peak: 1141.56 KB)
+[2025-06-13 22:09:28,590] 168 time_series_models.py - INFO - VAR forecast successfully completed
+[2025-06-13 22:09:28,591] 171 time_series_models.py - INFO - Next Day Price Predictions:
+[2025-06-13 22:09:28,591] 174 time_series_models.py - INFO - GBM: 24962.78
+[2025-06-13 22:09:28,592] 174 time_series_models.py - INFO - ARIMA: 24885.09
+[2025-06-13 22:09:28,592] 174 time_series_models.py - INFO - Prophet: 24681.91
+[2025-06-13 22:09:28,592] 174 time_series_models.py - INFO - VAR: 24898.41
+[2025-06-13 22:09:28,594] 183 time_series_models.py - INFO - Predictions saved to Tuned_Model\time_series_predictions.yaml
+[2025-06-13 22:09:28,594] 111 __init__.py - INFO - 'time_series_forecasts' completed in 1.7672 sec
+[2025-06-13 22:09:28,594] 112 __init__.py - INFO - Memory used: 0.00 KB (peak: 0.00 KB)
+[2025-06-13 22:09:28,603] 152 __init__.py - INFO - Appended and saved config to Tuned_Model\time_series_predictions.yaml
+[2025-06-13 22:09:28,626] 152 __init__.py - INFO - Appended and saved config to Tuned_Model\time_series_predictions.yaml
+[2025-06-13 22:09:28,631] 123 __init__.py - INFO - Loaded config from Tuned_Model\time_series_predictions.yaml
+[2025-06-13 22:09:28,638] 152 __init__.py - INFO - Appended and saved config to Tuned_Model\time_series_predictions.yaml
+[2025-06-13 22:09:28,639] 128 time_series_models.py - INFO - Appended average_expected: 24886.42 to Tuned_Model\time_series_predictions.yaml
+[2025-06-13 22:09:28,640] 217 __init__.py - INFO - Deleted: Tuned_Model\model.joblib
+[2025-06-13 22:09:28,645] 155 Experiment_Tracking_Prediction.py - INFO - Saved MLflow metadata to: Tuned_Model\mlflow_details.yaml
+[2025-06-13 22:09:28,648] 111 __init__.py - INFO - 'execute_mlflow_steps' completed in 2.6516 sec
+[2025-06-13 22:09:28,649] 112 __init__.py - INFO - Memory used: 0.00 KB (peak: 0.00 KB)

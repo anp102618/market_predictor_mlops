@@ -1,0 +1,14 @@
+artifact_uri: file:///D:/market_predictor_mlops/mlruns/295941836308463394/7c984a0fcc054ad288dcd53edbbbcc24/artifacts
+end_time: 1749832768647
+entry_point_name: ''
+experiment_id: '295941836308463394'
+lifecycle_stage: active
+run_id: 7c984a0fcc054ad288dcd53edbbbcc24
+run_name: Lasso_20250613_2209
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1749832766501
+status: 3
+tags: []
+user_id: prasa

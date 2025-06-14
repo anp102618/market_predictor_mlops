@@ -10,6 +10,7 @@ from pathlib import Path
 import shutil
 import subprocess
 import logging
+from typing import List
 
 # ─────────────── Global Paths ───────────────────────────
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -200,6 +201,25 @@ def copy_selected_files(source_folder: str, destination_folder: str, extensions=
         logger.error(f"File copy failed: {e}")
         print(f"Error copying files: {e}")
 
+
+def copy_selected_files1(source_dir: str, destination_dir: str, file_types: List[str]) -> None:
+   
+    if not os.path.exists(source_dir):
+        raise ValueError(f"Source directory does not exist: {source_dir}")
+    
+    os.makedirs(destination_dir, exist_ok=True)
+    source_dir = Path(source_dir)
+    destination_dir = Path(destination_dir)
+
+    for root, _, files in os.walk(source_dir):
+        for file in files:
+            if any(file.lower().endswith(ext.lower()) for ext in file_types):
+                src_file = os.path.join(root, file)
+                dest_file = os.path.join(destination_dir, file)
+                shutil.copy2(src_file, dest_file)
+                print(f"Copied: {src_file} -> {dest_file}")
+
+
 def delete_joblib_model(folder_path: str):
     logger = setup_logger(filename="logs")
     try:
@@ -229,6 +249,7 @@ def execute_files_backup():
     logger = setup_logger(filename="logs")
     try:
         logger.info("Starting Backing up of final_data.csv , joblib model , mlflow details yaml for previous trading day..")
+        copy_selected_files1("Data/previous_data", "Data/ref_data", [".csv", ".joblib", ".yaml"])
         copy_csv_file("Data/processed_data/final_data.csv", "Data/previous_data")
         copy_selected_files("Tuned_Model/", "Data/previous_data")
         logger.info("Backing up of previous trading day artifacts  completed ..")

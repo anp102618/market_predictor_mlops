@@ -5,41 +5,41 @@ Lasso:
     max_iter: 1000
   scores:
     train:
-      rmse: 150.3746
-      mae: 108.4988
+      rmse: 150.253
+      mae: 108.4419
       r2: 0.9938
       adjusted_r2: 0.9936
     val:
-      rmse: 168.852
-      mae: 110.3876
-      r2: 0.984
-      adjusted_r2: 0.9823
+      rmse: 168.9851
+      mae: 110.551
+      r2: 0.9844
+      adjusted_r2: 0.9827
     test:
-      rmse: 225.4317
-      mae: 169.2169
-      r2: 0.9312
-      adjusted_r2: 0.924
+      rmse: 227.4089
+      mae: 171.0028
+      r2: 0.9304
+      adjusted_r2: 0.923
 Ridge:
   model: Ridge
   params:
     alpha: 0.1
-    solver: lsqr
+    solver: auto
   scores:
     train:
-      rmse: 150.4337
-      mae: 108.608
+      rmse: 150.304
+      mae: 108.5555
       r2: 0.9938
       adjusted_r2: 0.9936
     val:
-      rmse: 168.658
-      mae: 110.1098
-      r2: 0.9841
-      adjusted_r2: 0.9824
+      rmse: 168.8238
+      mae: 110.3332
+      r2: 0.9844
+      adjusted_r2: 0.9828
     test:
-      rmse: 228.0654
-      mae: 171.3416
-      r2: 0.9296
-      adjusted_r2: 0.9222
+      rmse: 230.7329
+      mae: 173.7586
+      r2: 0.9283
+      adjusted_r2: 0.9208
 XGBRegressor:
   model: XGBRegressor
   params:
@@ -47,23 +47,23 @@ XGBRegressor:
     max_depth: 3
     learning_rate: 0.1
     subsample: 1.0
-    colsample_bytree: 1.0
+    colsample_bytree: 0.8
     gamma: 0
-    reg_alpha: 0.1
+    reg_alpha: 0
     reg_lambda: 1.5
   scores:
     train:
-      rmse: 80.1354
-      mae: 61.4207
-      r2: 0.9982
-      adjusted_r2: 0.9982
+      rmse: 83.175
+      mae: 63.5938
+      r2: 0.9981
+      adjusted_r2: 0.998
     val:
-      rmse: 77.833
-      mae: 59.3049
-      r2: 0.9966
-      adjusted_r2: 0.9962
+      rmse: 81.7636
+      mae: 63.1915
+      r2: 0.9963
+      adjusted_r2: 0.996
     test:
-      rmse: 1329.0998
-      mae: 1137.3368
-      r2: -1.391
-      adjusted_r2: -1.6427
+      rmse: 1177.5956
+      mae: 989.7264
+      r2: -0.8665
+      adjusted_r2: -1.0639
