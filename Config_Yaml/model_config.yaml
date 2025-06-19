@@ -10,6 +10,7 @@ Data_Ingestion:
     new_ticker_csv: "Data/new_data/ticker_data.csv"
     raw_ticker_csv: "Data/raw_data/ticker_data.csv"
     final_data_csv: "Data/processed_data/final_data.csv"
+    final_data_new: "Data/new_data/final_data.csv"
 
   const:
     base_url: "https://in.investing.com/indices/s-p-cnx-nifty-news/"

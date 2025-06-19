@@ -17,7 +17,7 @@ from mlflow.models import infer_signature
 from Model_Utils.feature_splitting_scaling import ScalingWithSplitStrategy
 from Common_Utils import (
     setup_logger, track_performance, CustomException,
-    load_yaml, write_yaml, append_yaml, delete_joblib_model
+    load_yaml, write_yaml, append_yaml, delete_joblib_model , copy_yaml_file
 )
 from Model_Utils.time_series_models import time_series_forecasts, add_average_to_yaml
 
@@ -123,9 +123,11 @@ def execute_mlflow_steps():
 
             # Save local model
             model_path = Path("Tuned_Model/model.joblib")
+            model_path_new = Path("Data/new_data/model.joblib")
             model_path.parent.mkdir(parents=True, exist_ok=True)
             delete_joblib_model(model_path.parent)
             joblib.dump(model, model_path)
+            joblib.dump(model, model_path_new)
 
             # Save metadata (no registry)
             model_uri = f"runs:/{run_id}/model"
@@ -152,7 +154,11 @@ def execute_mlflow_steps():
 
             with open(mlflow_details_yaml, "w") as f:
                 yaml.dump(metadata, f)
+            
+            copy_yaml_file(source_file="Tuned_Model/mlflow_details.yaml", destination_folder="Data/new_data")
+            copy_yaml_file(source_file="Tuned_Model/time_series_predictions.yaml", destination_folder="Data/new_data")
             logger.info(f"Saved MLflow metadata to: {mlflow_details_yaml}")
+            
 
     except CustomException as ce:
         logger.exception(f"Custom error: {ce}")

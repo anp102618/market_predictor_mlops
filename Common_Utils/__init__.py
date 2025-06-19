@@ -175,6 +175,27 @@ def copy_csv_file(source_file: str, destination_folder: str):
         logger.error(f"CSV copy failed: {e}")
         print(f"Error copying CSV: {e}")
 
+def copy_yaml_file(source_file: str, destination_folder: str):
+    logger = setup_logger(filename="logs")
+    try:
+        src = Path(source_file)
+        dest = Path(destination_folder)
+        dest.mkdir(parents=True, exist_ok=True)
+
+        if not src.exists():
+            raise FileNotFoundError(f"YAML file not found: {src}")
+        if src.suffix not in [".yaml", ".yml"]:
+            raise ValueError("Provided file is not a .yaml or .yml")
+
+        dest_file = dest / src.name
+        shutil.copy(src, dest_file)
+        logger.info(f"Copied YAML: {src} to {dest_file}")
+        print(f"Copied YAML: {src.name} to {dest_file}")
+
+    except CustomException as e:
+        logger.error(f"YAML copy failed: {e}")
+        print(f"Error copying YAML: {e}")
+
 # ------------------ Copy All Joblib Files ------------------ #
 def copy_selected_files(source_folder: str, destination_folder: str, extensions=(".joblib", ".yaml")):
     logger = setup_logger(filename="logs")
@@ -250,8 +271,9 @@ def execute_files_backup():
     try:
         logger.info("Starting Backing up of final_data.csv , joblib model , mlflow details yaml for previous trading day..")
         copy_selected_files1("Data/previous_data", "Data/ref_data", [".csv", ".joblib", ".yaml"])
-        copy_csv_file("Data/processed_data/final_data.csv", "Data/previous_data")
-        copy_selected_files("Tuned_Model/", "Data/previous_data")
+        copy_selected_files("Data/new_data", "Data/previous_data")
+        #copy_csv_file("Data/processed_data/final_data.csv", "Data/previous_data")
+        #copy_selected_files("Tuned_Model/", "Data/previous_data")
         logger.info("Backing up of previous trading day artifacts  completed ..")
     
     except CustomException as e:

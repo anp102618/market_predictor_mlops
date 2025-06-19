@@ -34,7 +34,7 @@ raw_news_csv: Path = Path(config["Data_Ingestion"]["path"]["raw_news_data"])    
 new_ticker_csv: Path = Path(config["Data_Ingestion"]["path"]["new_ticker_csv"])     # "Data/new_data/ticker_data.csv"
 raw_ticker_csv: Path = Path(config["Data_Ingestion"]["path"]["raw_ticker_csv"])     # "Data/raw_data/ticker_data.csv"
 final_data_csv: Path = Path(config["Data_Ingestion"]["path"]["final_data_csv"])     # "Data/processed_data/final_data.csv"
-
+final_data_new:Path = Path(config["Data_Ingestion"]["path"]["final_data_new"])      # "Data/new_data/final_data.csv"
 
 #-------------------Config-const------------------#
 base_url: str = config["Data_Ingestion"]["const"]["base_url"]      # "https://in.investing.com/indices/s-p-cnx-nifty-news/"
@@ -461,6 +461,7 @@ def align_sentiment_with_price(table_name1:str = ticker_data_table, table_name2:
         logger.info("Sentiment alignment completed successfully.")
 
         final_df.to_csv(final_data_csv)
+        final_df.to_csv(final_data_new)
         logger.info("Successfully updated ticker_data.csv with new stock data.")
         
 
