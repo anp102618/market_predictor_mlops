@@ -1,0 +1,11 @@
+[2025-06-20 14:27:54,397] 124 __init__.py - INFO - Loaded config from Config_Yaml/model_config.yaml
+[2025-06-20 14:27:54,397] 101 __init__.py - INFO - Running 'execute_mlflow_steps'...
+[2025-06-20 14:27:54,400] 91 __init__.py - CRITICAL - Unhandled Exception
+Traceback (most recent call last):
+  File "F:\nse_predictor\src\Experiment_Tracking_Prediction.py", line 169, in <module>
+    execute_mlflow_steps()
+  File "d:\market_predictor_mlops\Common_Utils\__init__.py", line 106, in wrapper
+    result = func(*args, **kwargs)
+  File "F:\nse_predictor\src\Experiment_Tracking_Prediction.py", line 73, in execute_mlflow_steps
+    raise EnvironmentError("MLFLOW_TRACKING_URI not set in environment.")
+OSError: MLFLOW_TRACKING_URI not set in environment.

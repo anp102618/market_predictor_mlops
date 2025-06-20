@@ -1,38 +1,78 @@
+from abc import ABC, abstractmethod
+from typing import Union
 from sklearn.impute import SimpleImputer, KNNImputer
 from sklearn.experimental import enable_iterative_imputer
-from abc import ABC, abstractmethod
+from sklearn.base import TransformerMixin
 
-# Abstract base strategy
+
 class ImputerStrategy(ABC):
+    """
+    Abstract base class for imputation strategies.
+    All strategies must implement the `get_imputer` method.
+    """
     @abstractmethod
-    def get_imputer(self):
+    def get_imputer(self) -> TransformerMixin:
         pass
 
-# Mean Imputer
+
 class MeanImputerStrategy(ImputerStrategy):
-    def get_imputer(self):
+    """
+    Strategy for imputing missing values using the mean.
+    """
+    def get_imputer(self) -> SimpleImputer:
         return SimpleImputer(strategy="mean")
 
-# Median Imputer
+
 class MedianImputerStrategy(ImputerStrategy):
-    def get_imputer(self):
+    """
+    Strategy for imputing missing values using the median.
+    """
+    def get_imputer(self) -> SimpleImputer:
         return SimpleImputer(strategy="median")
 
-# KNN Imputer
+
 class KNNImputerStrategy(ImputerStrategy):
-    def get_imputer(self):
+    """
+    Strategy for imputing missing values using k-Nearest Neighbors.
+    """
+    def get_imputer(self) -> KNNImputer:
         return KNNImputer(n_neighbors=5)
 
-# Iterative Imputer
+
 class IterativeImputerStrategy(ImputerStrategy):
-    def get_imputer(self):
+    """
+    Strategy for imputing missing values using Iterative Imputation.
+    """
+    def get_imputer(self) -> enable_iterative_imputer:
         return enable_iterative_imputer(random_state=42)
 
-# Factory Class
+
 class ImputerFactory:
+    """
+    Factory class for creating imputer instances based on strategy name.
+
+    Supported strategies:
+        - "mean"
+        - "median"
+        - "knn"
+        - "iterative"
+    """
     @staticmethod
-    def get_imputer(strategy: str):
-        strategy = strategy.lower()
+    def get_imputer(strategy: str) -> Union[SimpleImputer, KNNImputer]:
+        """
+        Returns an imputer object based on the selected strategy.
+
+        Args:
+            strategy (str): The name of the imputation strategy.
+
+        Returns:
+            TransformerMixin: An imputer instance corresponding to the strategy.
+
+        Raises:
+            ValueError: If an unsupported strategy is provided.
+        """
+        strategy = strategy.strip().lower()
+
         if strategy == "mean":
             return MeanImputerStrategy().get_imputer()
         elif strategy == "median":
@@ -42,4 +82,5 @@ class ImputerFactory:
         elif strategy == "iterative":
             return IterativeImputerStrategy().get_imputer()
         else:
-            raise ValueError(f"Unknown imputation strategy: {strategy}")
+            raise ValueError(f"Unknown imputation strategy: '{strategy}'. "
+                             f"Supported: ['mean', 'median', 'knn', 'iterative']")

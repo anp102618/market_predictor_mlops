@@ -5,20 +5,20 @@ Lasso:
     max_iter: 1000
   scores:
     train:
-      rmse: 150.253
-      mae: 108.4419
-      r2: 0.9938
-      adjusted_r2: 0.9936
+      rmse: 150.0706
+      mae: 108.3487
+      r2: 0.9939
+      adjusted_r2: 0.9937
     val:
-      rmse: 168.9851
-      mae: 110.551
-      r2: 0.9844
-      adjusted_r2: 0.9827
+      rmse: 168.9235
+      mae: 110.6074
+      r2: 0.9853
+      adjusted_r2: 0.9838
     test:
-      rmse: 227.4089
-      mae: 171.0028
-      r2: 0.9304
-      adjusted_r2: 0.923
+      rmse: 229.5469
+      mae: 173.8347
+      r2: 0.9296
+      adjusted_r2: 0.9222
 Ridge:
   model: Ridge
   params:
@@ -26,20 +26,20 @@ Ridge:
     solver: auto
   scores:
     train:
-      rmse: 150.304
-      mae: 108.5555
-      r2: 0.9938
-      adjusted_r2: 0.9936
+      rmse: 150.124
+      mae: 108.4583
+      r2: 0.9939
+      adjusted_r2: 0.9937
     val:
-      rmse: 168.8238
-      mae: 110.3332
-      r2: 0.9844
-      adjusted_r2: 0.9828
+      rmse: 168.7533
+      mae: 110.3669
+      r2: 0.9854
+      adjusted_r2: 0.9838
     test:
-      rmse: 230.7329
-      mae: 173.7586
-      r2: 0.9283
-      adjusted_r2: 0.9208
+      rmse: 233.185
+      mae: 176.9331
+      r2: 0.9274
+      adjusted_r2: 0.9197
 XGBRegressor:
   model: XGBRegressor
   params:
@@ -47,23 +47,23 @@ XGBRegressor:
     max_depth: 3
     learning_rate: 0.1
     subsample: 1.0
-    colsample_bytree: 0.8
+    colsample_bytree: 1.0
     gamma: 0
-    reg_alpha: 0
+    reg_alpha: 0.1
     reg_lambda: 1.5
   scores:
     train:
-      rmse: 83.175
-      mae: 63.5938
-      r2: 0.9981
-      adjusted_r2: 0.998
+      rmse: 81.218
+      mae: 62.0462
+      r2: 0.9982
+      adjusted_r2: 0.9981
     val:
-      rmse: 81.7636
-      mae: 63.1915
-      r2: 0.9963
-      adjusted_r2: 0.996
+      rmse: 81.6197
+      mae: 63.15
+      r2: 0.9966
+      adjusted_r2: 0.9962
     test:
-      rmse: 1177.5956
-      mae: 989.7264
-      r2: -0.8665
-      adjusted_r2: -1.0639
+      rmse: 1059.0695
+      mae: 888.9811
+      r2: -0.4984
+      adjusted_r2: -0.6561

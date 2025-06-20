@@ -1,0 +1,32 @@
+[2025-06-20 15:08:44,695] 124 __init__.py - INFO - Loaded config from Config_Yaml/model_config.yaml
+[2025-06-20 15:08:44,695] 101 __init__.py - INFO - Running 'execute_mlflow_steps'...
+[2025-06-20 15:08:44,695] 70 Experiment_Tracking_Prediction.py - INFO - MLflow tracking URI set to: http://127.0.0.1:5000
+[2025-06-20 15:08:44,747] 124 __init__.py - INFO - Loaded config from Config_Yaml\tuned_model.yaml
+[2025-06-20 15:08:44,800] 101 __init__.py - INFO - Running 'apply'...
+[2025-06-20 15:08:44,816] 91 __init__.py - CRITICAL - Unhandled Exception
+Traceback (most recent call last):
+  File "F:\nse_predictor\src\Experiment_Tracking_Prediction.py", line 162, in <module>
+    execute_mlflow_steps()
+  File "d:\market_predictor_mlops\Common_Utils\__init__.py", line 106, in wrapper
+    result = func(*args, **kwargs)
+  File "F:\nse_predictor\src\Experiment_Tracking_Prediction.py", line 79, in execute_mlflow_steps
+    X_train, X_val, X_test, y_train, y_val, y_test = splitter.apply(df)
+  File "d:\market_predictor_mlops\Common_Utils\__init__.py", line 106, in wrapper
+    result = func(*args, **kwargs)
+  File "d:\market_predictor_mlops\Model_Utils\feature_splitting_scaling.py", line 60, in apply
+    df = self.split_data(df)
+  File "d:\market_predictor_mlops\Model_Utils\feature_splitting_scaling.py", line 53, in split_data
+    df.loc[:train_end-1, 'split'] = 'train'
+  File "C:\Users\prasa\anaconda3\envs\mp-env\lib\site-packages\pandas\core\indexing.py", line 907, in __setitem__
+    indexer = self._get_setitem_indexer(key)
+  File "C:\Users\prasa\anaconda3\envs\mp-env\lib\site-packages\pandas\core\indexing.py", line 774, in _get_setitem_indexer
+    return self._convert_tuple(key)
+  File "C:\Users\prasa\anaconda3\envs\mp-env\lib\site-packages\pandas\core\indexing.py", line 989, in _convert_tuple
+    keyidx = [self._convert_to_indexer(k, axis=i) for i, k in enumerate(key)]
+  File "C:\Users\prasa\anaconda3\envs\mp-env\lib\site-packages\pandas\core\indexing.py", line 989, in <listcomp>
+    keyidx = [self._convert_to_indexer(k, axis=i) for i, k in enumerate(key)]
+  File "C:\Users\prasa\anaconda3\envs\mp-env\lib\site-packages\pandas\core\indexing.py", line 1470, in _convert_to_indexer
+    return labels._convert_slice_indexer(key, kind="loc")
+  File "C:\Users\prasa\anaconda3\envs\mp-env\lib\site-packages\pandas\core\indexes\base.py", line 4282, in _convert_slice_indexer
+    raise TypeError(
+TypeError: Slicing a positional slice with .loc is not allowed, Use .loc with labels or .iloc with positions instead.

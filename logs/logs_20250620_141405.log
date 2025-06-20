@@ -1,0 +1,496 @@
+[2025-06-20 14:14:05,672] 124 __init__.py - INFO - Loaded config from Config_Yaml/model_config.yaml
+[2025-06-20 14:14:05,802] 124 __init__.py - INFO - Loaded config from Config_Yaml/model_config.yaml
+[2025-06-20 14:14:05,887] 124 __init__.py - INFO - Loaded config from Config_Yaml/model_config.yaml
+[2025-06-20 14:14:05,891] 33 main.py - INFO - Starting End to End ML pipeline execution...
+[2025-06-20 14:14:05,891] 101 __init__.py - INFO - Running 'execute_pipeline'...
+[2025-06-20 14:14:05,891] 18 main.py - INFO -  Starting End to End ML pipeline execution ...
+[2025-06-20 14:14:05,891] 272 __init__.py - INFO - Starting Backing up of final_data.csv , joblib model , mlflow details yaml for previous trading day..
+[2025-06-20 14:14:06,011] 218 __init__.py - INFO - Copied .JOBLIB: Data\new_data\model.joblib → Data\previous_data\model.joblib
+[2025-06-20 14:14:06,020] 218 __init__.py - INFO - Copied .YAML: Data\new_data\mlflow_details.yaml → Data\previous_data\mlflow_details.yaml
+[2025-06-20 14:14:06,028] 218 __init__.py - INFO - Copied .YAML: Data\new_data\time_series_predictions.yaml → Data\previous_data\time_series_predictions.yaml
+[2025-06-20 14:14:06,030] 277 __init__.py - INFO - Backing up of previous trading day artifacts  completed ..
+[2025-06-20 14:14:06,031] 101 __init__.py - INFO - Running 'execute_data_ingestion'...
+[2025-06-20 14:14:06,031] 475 Data_Ingestion.py - INFO - Starting Data Ingestion pipeline
+[2025-06-20 14:14:06,032] 101 __init__.py - INFO - Running 'initiate_dbs'...
+[2025-06-20 14:14:06,032] 57 db_handler.py - INFO - starting dbs table formation 
+[2025-06-20 14:14:06,053] 101 __init__.py - INFO - Running 'write_df'...
+[2025-06-20 14:14:06,053] 101 __init__.py - INFO - Running 'connect'...
+[2025-06-20 14:14:06,070] 112 __init__.py - INFO - 'connect' completed in 0.0113 sec
+[2025-06-20 14:14:06,070] 113 __init__.py - INFO - Memory used: 503.89 KB (peak: 684.42 KB)
+[2025-06-20 14:14:06,110] 48 db_handler.py - INFO - [DB WRITE] Wrote 1179 records to table 'ticker_data' from file 'Data/raw_data/ticker_data.csv'
+[2025-06-20 14:14:06,110] 112 __init__.py - INFO - 'write_df' completed in 0.0567 sec
+[2025-06-20 14:14:06,110] 113 __init__.py - INFO - Memory used: 0.00 KB (peak: 0.00 KB)
+[2025-06-20 14:14:06,110] 101 __init__.py - INFO - Running 'write_df'...
+[2025-06-20 14:14:06,110] 101 __init__.py - INFO - Running 'connect'...
+[2025-06-20 14:14:06,110] 112 __init__.py - INFO - 'connect' completed in 0.0000 sec
+[2025-06-20 14:14:06,110] 113 __init__.py - INFO - Memory used: 0.53 KB (peak: 2.39 KB)
+[2025-06-20 14:14:06,147] 48 db_handler.py - INFO - [DB WRITE] Wrote 1412 records to table 'news_data' from file 'Data/raw_data/news_data.csv'
+[2025-06-20 14:14:06,147] 112 __init__.py - INFO - 'write_df' completed in 0.0367 sec
+[2025-06-20 14:14:06,147] 113 __init__.py - INFO - Memory used: 0.00 KB (peak: 0.00 KB)
+[2025-06-20 14:14:06,147] 63 db_handler.py - INFO - dbs table formation completed successfully
+[2025-06-20 14:14:06,147] 112 __init__.py - INFO - 'initiate_dbs' completed in 0.1146 sec
+[2025-06-20 14:14:06,147] 113 __init__.py - INFO - Memory used: 0.00 KB (peak: 0.00 KB)
+[2025-06-20 14:14:06,153] 101 __init__.py - INFO - Running 'update_data'...
+[2025-06-20 14:14:06,153] 101 __init__.py - INFO - Running 'fetch_df'...
+[2025-06-20 14:14:06,153] 101 __init__.py - INFO - Running 'connect'...
+[2025-06-20 14:14:06,153] 112 __init__.py - INFO - 'connect' completed in 0.0000 sec
+[2025-06-20 14:14:06,153] 113 __init__.py - INFO - Memory used: 2.48 KB (peak: 4.29 KB)
+[2025-06-20 14:14:06,163] 112 __init__.py - INFO - 'fetch_df' completed in 0.0096 sec
+[2025-06-20 14:14:06,163] 113 __init__.py - INFO - Memory used: 0.00 KB (peak: 0.00 KB)
+[2025-06-20 14:14:06,181] 358 Data_Ingestion.py - INFO - Existing ticker_df columns :Index(['date', 'nasdaq', 'sp500', 'dj30', 'crude_oil', 'gold', 'usd_inr',
+       '10yb', 'vix', 'nsebank', 'nsei'],
+      dtype='object')
+[2025-06-20 14:14:06,181] 101 __init__.py - INFO - Running 'get_last_date_from_db'...
+[2025-06-20 14:14:06,181] 101 __init__.py - INFO - Running 'fetch_df'...
+[2025-06-20 14:14:06,185] 101 __init__.py - INFO - Running 'connect'...
+[2025-06-20 14:14:06,185] 112 __init__.py - INFO - 'connect' completed in 0.0000 sec
+[2025-06-20 14:14:06,187] 113 __init__.py - INFO - Memory used: 1.87 KB (peak: 3.73 KB)
+[2025-06-20 14:14:06,194] 112 __init__.py - INFO - 'fetch_df' completed in 0.0091 sec
+[2025-06-20 14:14:06,194] 113 __init__.py - INFO - Memory used: 0.00 KB (peak: 0.00 KB)
+[2025-06-20 14:14:06,202] 340 Data_Ingestion.py - INFO - [DB] Last news date: 2025-06-12
+[2025-06-20 14:14:06,202] 112 __init__.py - INFO - 'get_last_date_from_db' completed in 0.0217 sec
+[2025-06-20 14:14:06,202] 113 __init__.py - INFO - Memory used: 0.00 KB (peak: 0.00 KB)
+[2025-06-20 14:14:11,208] 370 Data_Ingestion.py - INFO - Start get_closing_price for ticker :%5EIXIC
+[2025-06-20 14:14:11,208] 101 __init__.py - INFO - Running 'get_closing_prices'...
+[2025-06-20 14:14:11,208] 290 Data_Ingestion.py - INFO - [%5EIXIC] Attempt 1: Fetching https://finance.yahoo.com/quote/%5EIXIC/history
+[2025-06-20 14:14:54,837] 313 Data_Ingestion.py - INFO - [%5EIXIC] Successfully scraped 250 rows.
+[2025-06-20 14:14:56,991] 112 __init__.py - INFO - 'get_closing_prices' completed in 45.7835 sec
+[2025-06-20 14:14:56,991] 113 __init__.py - INFO - Memory used: 450.98 KB (peak: 972.44 KB)
+[2025-06-20 14:14:57,025] 383 Data_Ingestion.py - INFO -  get_closing_price successfully executed for ticker :%5EIXIC
+[2025-06-20 14:15:02,030] 370 Data_Ingestion.py - INFO - Start get_closing_price for ticker :%5EDJI
+[2025-06-20 14:15:02,030] 101 __init__.py - INFO - Running 'get_closing_prices'...
+[2025-06-20 14:15:02,034] 290 Data_Ingestion.py - INFO - [%5EDJI] Attempt 1: Fetching https://finance.yahoo.com/quote/%5EDJI/history
+[2025-06-20 14:15:47,827] 313 Data_Ingestion.py - INFO - [%5EDJI] Successfully scraped 250 rows.
+[2025-06-20 14:15:49,985] 112 __init__.py - INFO - 'get_closing_prices' completed in 47.9510 sec
+[2025-06-20 14:15:49,987] 113 __init__.py - INFO - Memory used: 60.66 KB (peak: 739.14 KB)
+[2025-06-20 14:15:50,006] 383 Data_Ingestion.py - INFO -  get_closing_price successfully executed for ticker :%5EDJI
+[2025-06-20 14:15:55,011] 370 Data_Ingestion.py - INFO - Start get_closing_price for ticker :%5EGSPC
+[2025-06-20 14:15:55,011] 101 __init__.py - INFO - Running 'get_closing_prices'...
+[2025-06-20 14:15:55,011] 290 Data_Ingestion.py - INFO - [%5EGSPC] Attempt 1: Fetching https://finance.yahoo.com/quote/%5EGSPC/history
+[2025-06-20 14:16:39,200] 313 Data_Ingestion.py - INFO - [%5EGSPC] Successfully scraped 250 rows.
+[2025-06-20 14:16:41,407] 112 __init__.py - INFO - 'get_closing_prices' completed in 46.3961 sec
+[2025-06-20 14:16:41,407] 113 __init__.py - INFO - Memory used: 47.18 KB (peak: 734.77 KB)
+[2025-06-20 14:16:41,426] 383 Data_Ingestion.py - INFO -  get_closing_price successfully executed for ticker :%5EGSPC
+[2025-06-20 14:16:46,435] 370 Data_Ingestion.py - INFO - Start get_closing_price for ticker :GC%3DF
+[2025-06-20 14:16:46,435] 101 __init__.py - INFO - Running 'get_closing_prices'...
+[2025-06-20 14:16:46,435] 290 Data_Ingestion.py - INFO - [GC%3DF] Attempt 1: Fetching https://finance.yahoo.com/quote/GC%3DF/history
+[2025-06-20 14:17:35,991] 313 Data_Ingestion.py - INFO - [GC%3DF] Successfully scraped 252 rows.
+[2025-06-20 14:17:38,145] 112 __init__.py - INFO - 'get_closing_prices' completed in 51.7101 sec
+[2025-06-20 14:17:38,145] 113 __init__.py - INFO - Memory used: 45.23 KB (peak: 734.29 KB)
+[2025-06-20 14:17:38,169] 383 Data_Ingestion.py - INFO -  get_closing_price successfully executed for ticker :GC%3DF
+[2025-06-20 14:17:43,177] 370 Data_Ingestion.py - INFO - Start get_closing_price for ticker :CL%3DF
+[2025-06-20 14:17:43,179] 101 __init__.py - INFO - Running 'get_closing_prices'...
+[2025-06-20 14:17:43,181] 290 Data_Ingestion.py - INFO - [CL%3DF] Attempt 1: Fetching https://finance.yahoo.com/quote/CL%3DF/history
+[2025-06-20 14:18:33,019] 313 Data_Ingestion.py - INFO - [CL%3DF] Successfully scraped 252 rows.
+[2025-06-20 14:18:35,193] 112 __init__.py - INFO - 'get_closing_prices' completed in 52.0123 sec
+[2025-06-20 14:18:35,193] 113 __init__.py - INFO - Memory used: 47.53 KB (peak: 733.90 KB)
+[2025-06-20 14:18:35,225] 383 Data_Ingestion.py - INFO -  get_closing_price successfully executed for ticker :CL%3DF
+[2025-06-20 14:18:40,240] 370 Data_Ingestion.py - INFO - Start get_closing_price for ticker :INR%3DX
+[2025-06-20 14:18:40,240] 101 __init__.py - INFO - Running 'get_closing_prices'...
+[2025-06-20 14:18:40,240] 290 Data_Ingestion.py - INFO - [INR%3DX] Attempt 1: Fetching https://finance.yahoo.com/quote/INR%3DX/history
+[2025-06-20 14:19:32,196] 313 Data_Ingestion.py - INFO - [INR%3DX] Successfully scraped 259 rows.
+[2025-06-20 14:19:34,411] 112 __init__.py - INFO - 'get_closing_prices' completed in 54.1708 sec
+[2025-06-20 14:19:34,411] 113 __init__.py - INFO - Memory used: 39.83 KB (peak: 732.27 KB)
+[2025-06-20 14:19:34,435] 383 Data_Ingestion.py - INFO -  get_closing_price successfully executed for ticker :INR%3DX
+[2025-06-20 14:19:39,442] 370 Data_Ingestion.py - INFO - Start get_closing_price for ticker :%5ENSEBANK
+[2025-06-20 14:19:39,443] 101 __init__.py - INFO - Running 'get_closing_prices'...
+[2025-06-20 14:19:39,443] 290 Data_Ingestion.py - INFO - [%5ENSEBANK] Attempt 1: Fetching https://finance.yahoo.com/quote/%5ENSEBANK/history
+[2025-06-20 14:20:21,637] 313 Data_Ingestion.py - INFO - [%5ENSEBANK] Successfully scraped 248 rows.
+[2025-06-20 14:20:23,806] 112 __init__.py - INFO - 'get_closing_prices' completed in 44.3634 sec
+[2025-06-20 14:20:23,806] 113 __init__.py - INFO - Memory used: 40.52 KB (peak: 734.05 KB)
+[2025-06-20 14:20:23,828] 383 Data_Ingestion.py - INFO -  get_closing_price successfully executed for ticker :%5ENSEBANK
+[2025-06-20 14:20:28,836] 370 Data_Ingestion.py - INFO - Start get_closing_price for ticker :%5ETNX
+[2025-06-20 14:20:28,836] 101 __init__.py - INFO - Running 'get_closing_prices'...
+[2025-06-20 14:20:28,836] 290 Data_Ingestion.py - INFO - [%5ETNX] Attempt 1: Fetching https://finance.yahoo.com/quote/%5ETNX/history
+[2025-06-20 14:21:23,342] 313 Data_Ingestion.py - INFO - [%5ETNX] Successfully scraped 250 rows.
+[2025-06-20 14:21:25,552] 112 __init__.py - INFO - 'get_closing_prices' completed in 56.7163 sec
+[2025-06-20 14:21:25,552] 113 __init__.py - INFO - Memory used: 50.74 KB (peak: 734.42 KB)
+[2025-06-20 14:21:25,560] 383 Data_Ingestion.py - INFO -  get_closing_price successfully executed for ticker :%5ETNX
+[2025-06-20 14:21:30,563] 370 Data_Ingestion.py - INFO - Start get_closing_price for ticker :%5EVIX
+[2025-06-20 14:21:30,563] 101 __init__.py - INFO - Running 'get_closing_prices'...
+[2025-06-20 14:21:30,563] 290 Data_Ingestion.py - INFO - [%5EVIX] Attempt 1: Fetching https://finance.yahoo.com/quote/%5EVIX/history
+[2025-06-20 14:22:30,191] 313 Data_Ingestion.py - INFO - [%5EVIX] Successfully scraped 251 rows.
+[2025-06-20 14:22:32,457] 112 __init__.py - INFO - 'get_closing_prices' completed in 61.8933 sec
+[2025-06-20 14:22:32,457] 113 __init__.py - INFO - Memory used: 34.72 KB (peak: 733.47 KB)
+[2025-06-20 14:22:32,477] 383 Data_Ingestion.py - INFO -  get_closing_price successfully executed for ticker :%5EVIX
+[2025-06-20 14:22:37,486] 370 Data_Ingestion.py - INFO - Start get_closing_price for ticker :%5ENSEI
+[2025-06-20 14:22:37,486] 101 __init__.py - INFO - Running 'get_closing_prices'...
+[2025-06-20 14:22:37,486] 290 Data_Ingestion.py - INFO - [%5ENSEI] Attempt 1: Fetching https://finance.yahoo.com/quote/%5ENSEI/history
+[2025-06-20 14:23:25,377] 313 Data_Ingestion.py - INFO - [%5ENSEI] Successfully scraped 249 rows.
+[2025-06-20 14:23:28,138] 112 __init__.py - INFO - 'get_closing_prices' completed in 50.6508 sec
+[2025-06-20 14:23:28,138] 113 __init__.py - INFO - Memory used: 45.43 KB (peak: 733.67 KB)
+[2025-06-20 14:23:28,160] 383 Data_Ingestion.py - INFO -  get_closing_price successfully executed for ticker :%5ENSEI
+[2025-06-20 14:23:28,197] 387 Data_Ingestion.py - INFO - Successfully updated  new_ticker_data.csv with new stock data.
+[2025-06-20 14:23:28,283] 397 Data_Ingestion.py - INFO - Successfully updated ticker_data.csv with new stock data.
+[2025-06-20 14:23:28,287] 101 __init__.py - INFO - Running 'write_df'...
+[2025-06-20 14:23:28,287] 101 __init__.py - INFO - Running 'connect'...
+[2025-06-20 14:23:28,289] 112 __init__.py - INFO - 'connect' completed in 0.0008 sec
+[2025-06-20 14:23:28,291] 113 __init__.py - INFO - Memory used: 1.02 KB (peak: 2.89 KB)
+[2025-06-20 14:23:28,375] 48 db_handler.py - INFO - [DB WRITE] Wrote 1184 records to table 'ticker_data' from file 'Data\raw_data\ticker_data.csv'
+[2025-06-20 14:23:28,375] 112 __init__.py - INFO - 'write_df' completed in 0.0888 sec
+[2025-06-20 14:23:28,375] 113 __init__.py - INFO - Memory used: 0.00 KB (peak: 0.00 KB)
+[2025-06-20 14:23:28,375] 399 Data_Ingestion.py - INFO - Successfully updated db table ticker_data with new stock data.
+[2025-06-20 14:23:28,377] 112 __init__.py - INFO - 'update_data' completed in 562.2244 sec
+[2025-06-20 14:23:28,379] 113 __init__.py - INFO - Memory used: 0.00 KB (peak: 0.00 KB)
+[2025-06-20 14:23:28,379] 101 __init__.py - INFO - Running 'update_data'...
+[2025-06-20 14:23:28,381] 148 Data_Ingestion.py - INFO - Starting update_dataframe for news_data table 
+[2025-06-20 14:23:28,381] 101 __init__.py - INFO - Running 'get_last_date_from_db'...
+[2025-06-20 14:23:28,381] 101 __init__.py - INFO - Running 'fetch_df'...
+[2025-06-20 14:23:28,381] 101 __init__.py - INFO - Running 'connect'...
+[2025-06-20 14:23:28,385] 112 __init__.py - INFO - 'connect' completed in 0.0020 sec
+[2025-06-20 14:23:28,385] 113 __init__.py - INFO - Memory used: 2.99 KB (peak: 4.86 KB)
+[2025-06-20 14:23:28,393] 112 __init__.py - INFO - 'fetch_df' completed in 0.0122 sec
+[2025-06-20 14:23:28,393] 113 __init__.py - INFO - Memory used: 0.00 KB (peak: 0.00 KB)
+[2025-06-20 14:23:28,399] 89 Data_Ingestion.py - INFO - [DB] Last news date: 2025-06-12
+[2025-06-20 14:23:28,399] 112 __init__.py - INFO - 'get_last_date_from_db' completed in 0.0182 sec
+[2025-06-20 14:23:28,399] 113 __init__.py - INFO - Memory used: 0.00 KB (peak: 0.00 KB)
+[2025-06-20 14:23:28,401] 162 Data_Ingestion.py - INFO - [SCRAPE] Fetching page 1
+[2025-06-20 14:23:40,797] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:23:40,799] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/indian-markets-open-firm-led-by-rally-in-psu-banks-infra-stocks-sebi-ras-caution-on-resistance-near-25000-4883051
+[2025-06-20 14:23:49,110] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/indian-markets-open-firm-led-by-rally-in-psu-banks-infra-stocks-sebi-ras-caution-on-resistance-near-25000-4883051
+[2025-06-20 14:23:51,304] 112 __init__.py - INFO - 'extract_text' completed in 10.5071 sec
+[2025-06-20 14:23:51,306] 113 __init__.py - INFO - Memory used: 46.67 KB (peak: 740.19 KB)
+[2025-06-20 14:23:51,306] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:23:51,306] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/nifty-below-24800-sebi-ras-warn-index-may-test-lower-support-levels-4883045
+[2025-06-20 14:23:59,156] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/nifty-below-24800-sebi-ras-warn-index-may-test-lower-support-levels-4883045
+[2025-06-20 14:24:01,382] 112 __init__.py - INFO - 'extract_text' completed in 10.0761 sec
+[2025-06-20 14:24:01,382] 113 __init__.py - INFO - Memory used: 30.17 KB (peak: 730.51 KB)
+[2025-06-20 14:24:01,385] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:24:01,385] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/asia-stocks-rise-after-trump-postpones-iran-decision-japan-spooked-by-hot-cpi-4883041
+[2025-06-20 14:24:09,479] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/asia-stocks-rise-after-trump-postpones-iran-decision-japan-spooked-by-hot-cpi-4883041
+[2025-06-20 14:24:11,696] 112 __init__.py - INFO - 'extract_text' completed in 10.3117 sec
+[2025-06-20 14:24:11,696] 113 __init__.py - INFO - Memory used: 38.58 KB (peak: 733.33 KB)
+[2025-06-20 14:24:11,698] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:24:11,698] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/nifty-ends-below-24800-midcaps-sink-swiggy-biocon-gain-in-a-volatile-session-4882712
+[2025-06-20 14:24:19,644] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/nifty-ends-below-24800-midcaps-sink-swiggy-biocon-gain-in-a-volatile-session-4882712
+[2025-06-20 14:24:21,872] 112 __init__.py - INFO - 'extract_text' completed in 10.1737 sec
+[2025-06-20 14:24:21,872] 113 __init__.py - INFO - Memory used: 26.75 KB (peak: 733.20 KB)
+[2025-06-20 14:24:21,874] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:24:21,874] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/india-shares-lower-at-close-of-trade-nifty-50-down-008-4882642
+[2025-06-20 14:24:29,762] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/india-shares-lower-at-close-of-trade-nifty-50-down-008-4882642
+[2025-06-20 14:24:32,012] 112 __init__.py - INFO - 'extract_text' completed in 10.1381 sec
+[2025-06-20 14:24:32,012] 113 __init__.py - INFO - Memory used: 26.53 KB (peak: 732.65 KB)
+[2025-06-20 14:24:32,014] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:24:32,014] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/indian-market-watch-subdued-start-amid-weekly-expiry-nifty-hovers-above-24800-4882427
+[2025-06-20 14:24:40,844] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/indian-market-watch-subdued-start-amid-weekly-expiry-nifty-hovers-above-24800-4882427
+[2025-06-20 14:24:43,005] 112 __init__.py - INFO - 'extract_text' completed in 10.9906 sec
+[2025-06-20 14:24:43,005] 113 __init__.py - INFO - Memory used: 27.54 KB (peak: 730.10 KB)
+[2025-06-20 14:24:43,007] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:24:43,010] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/nifty-struggles-below-25000-sebi-ras-signal-rangebound-moves-until-a-clear-breakout-4882407
+[2025-06-20 14:24:51,130] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/nifty-struggles-below-25000-sebi-ras-signal-rangebound-moves-until-a-clear-breakout-4882407
+[2025-06-20 14:24:53,295] 112 __init__.py - INFO - 'extract_text' completed in 10.2871 sec
+[2025-06-20 14:24:53,295] 113 __init__.py - INFO - Memory used: 34.23 KB (peak: 730.51 KB)
+[2025-06-20 14:24:53,295] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:24:53,295] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/asia-stocks-drop-on-report-of-possible-us-strike-on-iran-japan-hk-lead-losses-4882404
+[2025-06-20 14:25:01,216] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/asia-stocks-drop-on-report-of-possible-us-strike-on-iran-japan-hk-lead-losses-4882404
+[2025-06-20 14:25:03,403] 112 __init__.py - INFO - 'extract_text' completed in 10.1082 sec
+[2025-06-20 14:25:03,403] 113 __init__.py - INFO - Memory used: 34.54 KB (peak: 730.75 KB)
+[2025-06-20 14:25:03,403] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:25:03,403] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/dalal-street-on-caution-mode-nifty-ends-below-24850-hindustan-zinc-slumps-indusind-soars-4880872
+[2025-06-20 14:25:11,118] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/dalal-street-on-caution-mode-nifty-ends-below-24850-hindustan-zinc-slumps-indusind-soars-4880872
+[2025-06-20 14:25:13,269] 112 __init__.py - INFO - 'extract_text' completed in 9.8667 sec
+[2025-06-20 14:25:13,269] 113 __init__.py - INFO - Memory used: 26.19 KB (peak: 731.00 KB)
+[2025-06-20 14:25:13,272] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:25:13,272] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/india-shares-lower-at-close-of-trade-nifty-50-down-017-4880850
+[2025-06-20 14:25:20,965] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/india-shares-lower-at-close-of-trade-nifty-50-down-017-4880850
+[2025-06-20 14:25:23,143] 112 __init__.py - INFO - 'extract_text' completed in 9.8708 sec
+[2025-06-20 14:25:23,145] 113 __init__.py - INFO - Memory used: 25.67 KB (peak: 730.13 KB)
+[2025-06-20 14:25:25,162] 162 Data_Ingestion.py - INFO - [SCRAPE] Fetching page 2
+[2025-06-20 14:25:34,730] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:25:34,730] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/nifty-vs-gold-why-this-forgotten-market-ratio-could-signal-a-new-bull-run-4880418
+[2025-06-20 14:25:42,238] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/nifty-vs-gold-why-this-forgotten-market-ratio-could-signal-a-new-bull-run-4880418
+[2025-06-20 14:25:44,427] 112 __init__.py - INFO - 'extract_text' completed in 9.6971 sec
+[2025-06-20 14:25:44,429] 113 __init__.py - INFO - Memory used: 37.95 KB (peak: 734.89 KB)
+[2025-06-20 14:25:44,429] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:25:44,429] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/indian-markets-rebound-from-weak-start-nifty-holds-24900-as-auto-realty-stocks-rally-4880407
+[2025-06-20 14:25:52,294] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/indian-markets-rebound-from-weak-start-nifty-holds-24900-as-auto-realty-stocks-rally-4880407
+[2025-06-20 14:25:54,498] 112 __init__.py - INFO - 'extract_text' completed in 10.0688 sec
+[2025-06-20 14:25:54,498] 113 __init__.py - INFO - Memory used: 49.72 KB (peak: 751.15 KB)
+[2025-06-20 14:25:54,498] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:25:54,498] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/nifty-watch-sebi-ras-flag-24800-as-makeorbreak-level-in-near-term-4880393
+[2025-06-20 14:26:02,470] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/nifty-watch-sebi-ras-flag-24800-as-makeorbreak-level-in-near-term-4880393
+[2025-06-20 14:26:04,682] 112 __init__.py - INFO - 'extract_text' completed in 10.1843 sec
+[2025-06-20 14:26:04,682] 113 __init__.py - INFO - Memory used: 33.09 KB (peak: 732.63 KB)
+[2025-06-20 14:26:04,682] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:26:04,682] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/asia-stocks-mixed-amid-israeliran-conflict-nikkei-hits-4mth-high-on-weaker-yen-4880378
+[2025-06-20 14:26:12,836] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/asia-stocks-mixed-amid-israeliran-conflict-nikkei-hits-4mth-high-on-weaker-yen-4880378
+[2025-06-20 14:26:14,974] 112 __init__.py - INFO - 'extract_text' completed in 10.2916 sec
+[2025-06-20 14:26:14,974] 113 __init__.py - INFO - Memory used: 35.76 KB (peak: 732.46 KB)
+[2025-06-20 14:26:14,978] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:26:14,978] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/nifty-ends-below-24900-pharma-stocks-face-heat-amid-tariff-fears-4879152
+[2025-06-20 14:26:23,547] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/nifty-ends-below-24900-pharma-stocks-face-heat-amid-tariff-fears-4879152
+[2025-06-20 14:26:25,730] 112 __init__.py - INFO - 'extract_text' completed in 10.7524 sec
+[2025-06-20 14:26:25,730] 113 __init__.py - INFO - Memory used: 25.15 KB (peak: 732.92 KB)
+[2025-06-20 14:26:25,730] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:26:25,730] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/india-shares-lower-at-close-of-trade-nifty-50-down-037-4879025
+[2025-06-20 14:26:34,577] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/india-shares-lower-at-close-of-trade-nifty-50-down-037-4879025
+[2025-06-20 14:26:36,758] 112 __init__.py - INFO - 'extract_text' completed in 11.0280 sec
+[2025-06-20 14:26:36,758] 113 __init__.py - INFO - Memory used: 24.52 KB (peak: 731.02 KB)
+[2025-06-20 14:26:36,758] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:26:36,758] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/indian-markets-trade-subdued-nifty-below-24900-sebi-ras-remain-cautious-4878617
+[2025-06-20 14:26:44,724] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/indian-markets-trade-subdued-nifty-below-24900-sebi-ras-remain-cautious-4878617
+[2025-06-20 14:26:46,908] 112 __init__.py - INFO - 'extract_text' completed in 10.1503 sec
+[2025-06-20 14:26:46,908] 113 __init__.py - INFO - Memory used: 33.35 KB (peak: 732.69 KB)
+[2025-06-20 14:26:46,908] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:26:46,908] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/asia-stocks-spooked-by-trump-tehran-comments-boj-in-focus-4878587
+[2025-06-20 14:26:55,086] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/asia-stocks-spooked-by-trump-tehran-comments-boj-in-focus-4878587
+[2025-06-20 14:26:57,271] 112 __init__.py - INFO - 'extract_text' completed in 10.3631 sec
+[2025-06-20 14:26:57,271] 113 __init__.py - INFO - Memory used: 29.01 KB (peak: 732.60 KB)
+[2025-06-20 14:26:57,271] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:26:57,271] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/nifty-remains-in-a-tight-band-sebi-ras-map-key-resistance-and-support-levels-to-watch-4878595
+[2025-06-20 14:27:05,443] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/nifty-remains-in-a-tight-band-sebi-ras-map-key-resistance-and-support-levels-to-watch-4878595
+[2025-06-20 14:27:07,657] 112 __init__.py - INFO - 'extract_text' completed in 10.3859 sec
+[2025-06-20 14:27:07,657] 113 __init__.py - INFO - Memory used: 27.64 KB (peak: 732.36 KB)
+[2025-06-20 14:27:07,657] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:27:07,657] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/indian-markets-rebound-as-wpi-inflation-cools-nifty-ends-above-24900-4877513
+[2025-06-20 14:27:15,771] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/indian-markets-rebound-as-wpi-inflation-cools-nifty-ends-above-24900-4877513
+[2025-06-20 14:27:17,957] 112 __init__.py - INFO - 'extract_text' completed in 10.3000 sec
+[2025-06-20 14:27:17,957] 113 __init__.py - INFO - Memory used: 32.78 KB (peak: 733.72 KB)
+[2025-06-20 14:27:19,968] 162 Data_Ingestion.py - INFO - [SCRAPE] Fetching page 3
+[2025-06-20 14:27:31,527] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:27:31,527] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/india-shares-higher-at-close-of-trade-nifty-50-up-092-4877258
+[2025-06-20 14:27:39,073] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/india-shares-higher-at-close-of-trade-nifty-50-up-092-4877258
+[2025-06-20 14:27:41,211] 112 __init__.py - INFO - 'extract_text' completed in 9.6836 sec
+[2025-06-20 14:27:41,211] 113 __init__.py - INFO - Memory used: 39.82 KB (peak: 736.82 KB)
+[2025-06-20 14:27:41,211] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:27:41,211] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/nifty-bees-may-retest-september-highs-enter-price-discovery-sebi-ra-priyank-sharma-4877020
+[2025-06-20 14:27:48,430] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/nifty-bees-may-retest-september-highs-enter-price-discovery-sebi-ra-priyank-sharma-4877020
+[2025-06-20 14:27:50,595] 112 __init__.py - INFO - 'extract_text' completed in 9.3845 sec
+[2025-06-20 14:27:50,595] 113 __init__.py - INFO - Memory used: 27.30 KB (peak: 731.39 KB)
+[2025-06-20 14:27:50,598] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:27:50,598] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/israeliran-tensions-keep-indian-markets-rangebound-psu-banks-autos-drag-it-offers-support-4876812
+[2025-06-20 14:27:57,461] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/israeliran-tensions-keep-indian-markets-rangebound-psu-banks-autos-drag-it-offers-support-4876812
+[2025-06-20 14:27:59,620] 112 __init__.py - INFO - 'extract_text' completed in 9.0217 sec
+[2025-06-20 14:27:59,620] 113 __init__.py - INFO - Memory used: 33.75 KB (peak: 733.02 KB)
+[2025-06-20 14:27:59,620] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:27:59,620] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/nifty-watch-sebi-ras-see-volatile-week-ahead-amid-geopolitical-tensions-4876790
+[2025-06-20 14:28:06,686] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/nifty-watch-sebi-ras-see-volatile-week-ahead-amid-geopolitical-tensions-4876790
+[2025-06-20 14:28:08,835] 112 __init__.py - INFO - 'extract_text' completed in 9.2149 sec
+[2025-06-20 14:28:08,835] 113 __init__.py - INFO - Memory used: 30.84 KB (peak: 732.71 KB)
+[2025-06-20 14:28:08,837] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:28:08,837] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/asia-stocks-steady-amid-meast-tensions-cbank-meetings-loom-4876778
+[2025-06-20 14:28:16,815] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/asia-stocks-steady-amid-meast-tensions-cbank-meetings-loom-4876778
+[2025-06-20 14:28:19,011] 112 __init__.py - INFO - 'extract_text' completed in 10.1738 sec
+[2025-06-20 14:28:19,011] 113 __init__.py - INFO - Memory used: 35.12 KB (peak: 733.46 KB)
+[2025-06-20 14:28:19,011] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:28:19,011] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/hbl-engineering-secures-rs13295-crore-railway-safety-contract-is-it-a-buy-4876741
+[2025-06-20 14:28:27,542] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/hbl-engineering-secures-rs13295-crore-railway-safety-contract-is-it-a-buy-4876741
+[2025-06-20 14:28:29,736] 112 __init__.py - INFO - 'extract_text' completed in 10.7256 sec
+[2025-06-20 14:28:29,738] 113 __init__.py - INFO - Memory used: 35.93 KB (peak: 733.10 KB)
+[2025-06-20 14:28:29,738] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:28:29,741] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/capri-global-capital-to-power-its-next-phase-of-growth-raises-rs-2000-crores-4876739
+[2025-06-20 14:28:36,812] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/capri-global-capital-to-power-its-next-phase-of-growth-raises-rs-2000-crores-4876739
+[2025-06-20 14:28:39,003] 112 __init__.py - INFO - 'extract_text' completed in 9.2623 sec
+[2025-06-20 14:28:39,003] 113 __init__.py - INFO - Memory used: 37.39 KB (peak: 733.45 KB)
+[2025-06-20 14:28:39,007] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:28:39,007] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/nifty-50-index-has-crashed-heres-why-it-will-rebound-soon-4875880
+[2025-06-20 14:28:46,441] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/nifty-50-index-has-crashed-heres-why-it-will-rebound-soon-4875880
+[2025-06-20 14:28:48,593] 112 __init__.py - INFO - 'extract_text' completed in 9.5860 sec
+[2025-06-20 14:28:48,593] 113 __init__.py - INFO - Memory used: 29.94 KB (peak: 733.92 KB)
+[2025-06-20 14:28:48,593] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:28:48,593] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/asian-markets-open-nikkei-drops-133-sensex-preopen-tumbles-crude-soars-4875879
+[2025-06-20 14:28:58,065] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/asian-markets-open-nikkei-drops-133-sensex-preopen-tumbles-crude-soars-4875879
+[2025-06-20 14:29:00,248] 112 __init__.py - INFO - 'extract_text' completed in 11.6548 sec
+[2025-06-20 14:29:00,248] 113 __init__.py - INFO - Memory used: 31.27 KB (peak: 733.62 KB)
+[2025-06-20 14:29:00,248] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:29:00,248] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/indian-markets-end-in-red-financials-fmcg-lead-losses-while-broader-indices-show-relative-strength-4875369
+[2025-06-20 14:29:08,287] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/indian-markets-end-in-red-financials-fmcg-lead-losses-while-broader-indices-show-relative-strength-4875369
+[2025-06-20 14:29:10,474] 112 __init__.py - INFO - 'extract_text' completed in 10.2267 sec
+[2025-06-20 14:29:10,474] 113 __init__.py - INFO - Memory used: 32.21 KB (peak: 731.60 KB)
+[2025-06-20 14:29:12,485] 162 Data_Ingestion.py - INFO - [SCRAPE] Fetching page 4
+[2025-06-20 14:29:30,160] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:29:30,160] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/india-shares-lower-at-close-of-trade-nifty-50-down-068-4875342
+[2025-06-20 14:29:38,480] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/india-shares-lower-at-close-of-trade-nifty-50-down-068-4875342
+[2025-06-20 14:29:40,675] 112 __init__.py - INFO - 'extract_text' completed in 10.5149 sec
+[2025-06-20 14:29:40,675] 113 __init__.py - INFO - Memory used: 39.39 KB (peak: 737.16 KB)
+[2025-06-20 14:29:40,675] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:29:40,675] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/every-3-months-expect-a-dip-sebi-ra-nikhil-gangil-on-why-market-corrections-are-not-a-bug-but-a-feature-4875149
+[2025-06-20 14:29:48,515] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/every-3-months-expect-a-dip-sebi-ra-nikhil-gangil-on-why-market-corrections-are-not-a-bug-but-a-feature-4875149
+[2025-06-20 14:29:50,656] 112 __init__.py - INFO - 'extract_text' completed in 9.9811 sec
+[2025-06-20 14:29:50,656] 113 __init__.py - INFO - Memory used: 32.86 KB (peak: 732.84 KB)
+[2025-06-20 14:29:50,661] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:29:50,661] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/nifty-under-pressure-sebi-ras-advise-caution-after-index-breaches-support-zones-4875041
+[2025-06-20 14:29:59,206] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/nifty-under-pressure-sebi-ras-advise-caution-after-index-breaches-support-zones-4875041
+[2025-06-20 14:30:01,367] 112 __init__.py - INFO - 'extract_text' completed in 10.7060 sec
+[2025-06-20 14:30:01,367] 113 __init__.py - INFO - Memory used: 30.11 KB (peak: 733.45 KB)
+[2025-06-20 14:30:01,367] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:30:01,367] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/asia-stocks-tumble-as-israel-attacks-iran-japan-s-korea-lead-losses-4875037
+[2025-06-20 14:30:09,225] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/asia-stocks-tumble-as-israel-attacks-iran-japan-s-korea-lead-losses-4875037
+[2025-06-20 14:30:11,414] 112 __init__.py - INFO - 'extract_text' completed in 10.0474 sec
+[2025-06-20 14:30:11,414] 113 __init__.py - INFO - Memory used: 30.83 KB (peak: 733.05 KB)
+[2025-06-20 14:30:11,414] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:30:11,414] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/india-markets-slump-in-early-trade-reliance-tech-stocks-underperform-amid-broad-selloff-4875036
+[2025-06-20 14:30:19,438] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/india-markets-slump-in-early-trade-reliance-tech-stocks-underperform-amid-broad-selloff-4875036
+[2025-06-20 14:30:21,619] 112 __init__.py - INFO - 'extract_text' completed in 10.2041 sec
+[2025-06-20 14:30:21,619] 113 __init__.py - INFO - Memory used: 35.81 KB (peak: 730.49 KB)
+[2025-06-20 14:30:21,619] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:30:21,622] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/india-market-watch-sebi-ras-flag-24800-as-key-nifty-support-after-terrible-thursday-for-dalal-street-4875014
+[2025-06-20 14:30:29,474] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/india-market-watch-sebi-ras-flag-24800-as-key-nifty-support-after-terrible-thursday-for-dalal-street-4875014
+[2025-06-20 14:30:31,651] 112 __init__.py - INFO - 'extract_text' completed in 10.0286 sec
+[2025-06-20 14:30:31,651] 113 __init__.py - INFO - Memory used: 27.38 KB (peak: 733.04 KB)
+[2025-06-20 14:30:31,653] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:30:31,653] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/nifty-ends-lower-on-weekly-expiry-financials-autos-it-lead-broad-market-selloff-4873602
+[2025-06-20 14:30:39,582] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/nifty-ends-lower-on-weekly-expiry-financials-autos-it-lead-broad-market-selloff-4873602
+[2025-06-20 14:30:41,748] 112 __init__.py - INFO - 'extract_text' completed in 10.0949 sec
+[2025-06-20 14:30:41,751] 113 __init__.py - INFO - Memory used: 34.52 KB (peak: 732.94 KB)
+[2025-06-20 14:30:41,751] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:30:41,751] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/india-shares-lower-at-close-of-trade-nifty-50-down-101-4873579
+[2025-06-20 14:30:50,605] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/india-shares-lower-at-close-of-trade-nifty-50-down-101-4873579
+[2025-06-20 14:30:52,779] 112 __init__.py - INFO - 'extract_text' completed in 11.0288 sec
+[2025-06-20 14:30:52,780] 113 __init__.py - INFO - Memory used: 33.60 KB (peak: 732.71 KB)
+[2025-06-20 14:30:52,780] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:30:52,780] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/breakout-watch-sebi-ra-financial-sarthis-identifies-5-oil--gas-stocks-poised-to-gain-from-sectoral-rotation-4873465
+[2025-06-20 14:31:01,420] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/breakout-watch-sebi-ra-financial-sarthis-identifies-5-oil--gas-stocks-poised-to-gain-from-sectoral-rotation-4873465
+[2025-06-20 14:31:03,599] 112 __init__.py - INFO - 'extract_text' completed in 10.8190 sec
+[2025-06-20 14:31:03,599] 113 __init__.py - INFO - Memory used: 27.08 KB (peak: 730.57 KB)
+[2025-06-20 14:31:03,601] 101 __init__.py - INFO - Running 'extract_text'...
+[2025-06-20 14:31:03,601] 103 Data_Ingestion.py - INFO - [SCRAPER] Attempt 1 for URL: https://in.investing.com/news/stock-market-news/asian-markets-open-nikkei-hang-seng-fall-on-55-uschina-tariff-shock-sensex-poised-for-weak-start-4873291
+[2025-06-20 14:31:11,755] 130 Data_Ingestion.py - INFO - [SCRAPER] Successfully extracted article for URL: https://in.investing.com/news/stock-market-news/asian-markets-open-nikkei-hang-seng-fall-on-55-uschina-tariff-shock-sensex-poised-for-weak-start-4873291
+[2025-06-20 14:31:13,915] 112 __init__.py - INFO - 'extract_text' completed in 10.3137 sec
+[2025-06-20 14:31:13,915] 113 __init__.py - INFO - Memory used: 31.33 KB (peak: 732.74 KB)
+[2025-06-20 14:31:13,927] 185 Data_Ingestion.py - INFO - [SCRAPE] Reached articles already present. Ending.
+[2025-06-20 14:31:30,207] 101 __init__.py - INFO - Running 'finbert_implement'...
+[2025-06-20 14:31:30,207] 163 finbert_implementation.py - INFO - Text Cleaning starting on news df
+[2025-06-20 14:31:30,207] 84 finbert_implementation.py - INFO - [TextCleaner] Cleaning process started
+[2025-06-20 14:31:49,430] 98 finbert_implementation.py - INFO - [TextCleaner] Completed processing 33 records
+[2025-06-20 14:31:49,430] 166 finbert_implementation.py - INFO - Text Cleaning completed successfully on news df
+[2025-06-20 14:31:49,430] 167 finbert_implementation.py - INFO - finbert implementation starting on news df
+[2025-06-20 14:31:49,430] 110 finbert_implementation.py - INFO - [SentimentScorer] Loading model and tokenizer...
+[2025-06-20 14:31:54,704] 113 finbert_implementation.py - INFO - [SentimentScorer] Model and tokenizer loaded.
+[2025-06-20 14:31:54,704] 136 finbert_implementation.py - INFO - [SentimentScorer] Starting sentiment scoring...
+[2025-06-20 14:32:11,023] 154 finbert_implementation.py - INFO - [SentimentScorer] Completed sentiment scoring for 6 days.
+[2025-06-20 14:32:11,025] 170 finbert_implementation.py - INFO - finbert implementation completed sucessfully on news df
+[2025-06-20 14:32:11,304] 112 __init__.py - INFO - 'finbert_implement' completed in 41.0973 sec
+[2025-06-20 14:32:11,304] 113 __init__.py - INFO - Memory used: 92808.11 KB (peak: 186066.53 KB)
+[2025-06-20 14:32:11,751] 218 Data_Ingestion.py - INFO - Sucessfully completed  update  new_data/news_data.csv 
+[2025-06-20 14:32:11,751] 101 __init__.py - INFO - Running 'fetch_df'...
+[2025-06-20 14:32:11,751] 101 __init__.py - INFO - Running 'connect'...
+[2025-06-20 14:32:11,751] 112 __init__.py - INFO - 'connect' completed in 0.0000 sec
+[2025-06-20 14:32:11,751] 113 __init__.py - INFO - Memory used: 0.33 KB (peak: 2.19 KB)
+[2025-06-20 14:32:11,767] 112 __init__.py - INFO - 'fetch_df' completed in 0.0159 sec
+[2025-06-20 14:32:11,767] 113 __init__.py - INFO - Memory used: 0.00 KB (peak: 0.00 KB)
+[2025-06-20 14:32:11,784] 232 Data_Ingestion.py - INFO - Sucessfully completed  update_dataframe for news_data.csv 
+[2025-06-20 14:32:11,787] 101 __init__.py - INFO - Running 'write_df'...
+[2025-06-20 14:32:11,788] 101 __init__.py - INFO - Running 'connect'...
+[2025-06-20 14:32:11,789] 112 __init__.py - INFO - 'connect' completed in 0.0000 sec
+[2025-06-20 14:32:11,790] 113 __init__.py - INFO - Memory used: 0.53 KB (peak: 2.39 KB)
+[2025-06-20 14:32:11,813] 48 db_handler.py - INFO - [DB WRITE] Wrote 1418 records to table 'news_data' from file 'Data\raw_data\news_data.csv'
+[2025-06-20 14:32:11,813] 112 __init__.py - INFO - 'write_df' completed in 0.0253 sec
+[2025-06-20 14:32:11,813] 113 __init__.py - INFO - Memory used: 0.00 KB (peak: 0.00 KB)
+[2025-06-20 14:32:11,813] 235 Data_Ingestion.py - INFO - Sucessfully completed  update_dataframe for news_data table 
+[2025-06-20 14:32:11,821] 112 __init__.py - INFO - 'update_data' completed in 523.4414 sec
+[2025-06-20 14:32:11,821] 113 __init__.py - INFO - Memory used: 0.00 KB (peak: 0.00 KB)
+[2025-06-20 14:32:11,821] 101 __init__.py - INFO - Running 'align_sentiment_with_price'...
+[2025-06-20 14:32:11,821] 422 Data_Ingestion.py - INFO - Reading tables in db as df....
+[2025-06-20 14:32:11,861] 428 Data_Ingestion.py - INFO - Merging sentiment data with price data...
+[2025-06-20 14:32:11,897] 461 Data_Ingestion.py - INFO - Sentiment alignment completed successfully.
+[2025-06-20 14:32:12,064] 465 Data_Ingestion.py - INFO - Successfully updated ticker_data.csv with new stock data.
+[2025-06-20 14:32:12,064] 112 __init__.py - INFO - 'align_sentiment_with_price' completed in 0.2429 sec
+[2025-06-20 14:32:12,064] 113 __init__.py - INFO - Memory used: 168.49 KB (peak: 3357.20 KB)
+[2025-06-20 14:32:12,105] 101 __init__.py - INFO - Running 'write_df'...
+[2025-06-20 14:32:12,105] 101 __init__.py - INFO - Running 'connect'...
+[2025-06-20 14:32:12,105] 112 __init__.py - INFO - 'connect' completed in 0.0000 sec
+[2025-06-20 14:32:12,105] 113 __init__.py - INFO - Memory used: 0.53 KB (peak: 2.39 KB)
+[2025-06-20 14:32:12,162] 48 db_handler.py - INFO - [DB WRITE] Wrote 1157 records to table 'final_data' from file 'Data\processed_data\final_data.csv'
+[2025-06-20 14:32:12,162] 112 __init__.py - INFO - 'write_df' completed in 0.0565 sec
+[2025-06-20 14:32:12,162] 113 __init__.py - INFO - Memory used: 0.00 KB (peak: 0.00 KB)
+[2025-06-20 14:32:12,162] 485 Data_Ingestion.py - INFO -  Data Ingestion pipeline sucessfully executed
+[2025-06-20 14:32:12,162] 112 __init__.py - INFO - 'execute_data_ingestion' completed in 1086.1310 sec
+[2025-06-20 14:32:12,162] 113 __init__.py - INFO - Memory used: 0.00 KB (peak: 0.00 KB)
+[2025-06-20 14:32:12,162] 168 Data_Validation.py - INFO - Starting Data Validation pipeline
+[2025-06-20 14:32:12,162] 101 __init__.py - INFO - Running 'fetch_df'...
+[2025-06-20 14:32:12,162] 101 __init__.py - INFO - Running 'connect'...
+[2025-06-20 14:32:12,170] 112 __init__.py - INFO - 'connect' completed in 0.0080 sec
+[2025-06-20 14:32:12,170] 113 __init__.py - INFO - Memory used: 1.01 KB (peak: 2.87 KB)
+[2025-06-20 14:32:12,179] 112 __init__.py - INFO - 'fetch_df' completed in 0.0173 sec
+[2025-06-20 14:32:12,179] 113 __init__.py - INFO - Memory used: 0.00 KB (peak: 0.00 KB)
+[2025-06-20 14:32:12,183] 101 __init__.py - INFO - Running 'run_all_checks'...
+[2025-06-20 14:32:12,183] 140 Data_Validation.py - INFO - Starting data validation checks...
+[2025-06-20 14:32:12,183] 101 __init__.py - INFO - Running 'check_columns'...
+[2025-06-20 14:32:12,183] 112 __init__.py - INFO - 'check_columns' completed in 0.0000 sec
+[2025-06-20 14:32:12,183] 113 __init__.py - INFO - Memory used: 1.81 KB (peak: 3.17 KB)
+[2025-06-20 14:32:12,183] 101 __init__.py - INFO - Running 'check_dtypes'...
+[2025-06-20 14:32:12,207] 112 __init__.py - INFO - 'check_dtypes' completed in 0.0233 sec
+[2025-06-20 14:32:12,207] 113 __init__.py - INFO - Memory used: 125.16 KB (peak: 147.28 KB)
+[2025-06-20 14:32:12,207] 101 __init__.py - INFO - Running 'check_missing_values'...
+[2025-06-20 14:32:12,221] 112 __init__.py - INFO - 'check_missing_values' completed in 0.0141 sec
+[2025-06-20 14:32:12,221] 113 __init__.py - INFO - Memory used: 21.41 KB (peak: 193.75 KB)
+[2025-06-20 14:32:12,222] 101 __init__.py - INFO - Running 'check_value_ranges'...
+[2025-06-20 14:32:12,238] 112 __init__.py - INFO - 'check_value_ranges' completed in 0.0146 sec
+[2025-06-20 14:32:12,238] 113 __init__.py - INFO - Memory used: 18.61 KB (peak: 46.81 KB)
+[2025-06-20 14:32:12,238] 101 __init__.py - INFO - Running 'check_duplicates'...
+[2025-06-20 14:32:12,244] 112 __init__.py - INFO - 'check_duplicates' completed in 0.0063 sec
+[2025-06-20 14:32:12,244] 113 __init__.py - INFO - Memory used: 7.34 KB (peak: 165.64 KB)
+[2025-06-20 14:32:12,244] 101 __init__.py - INFO - Running 'check_future_dates'...
+[2025-06-20 14:32:12,256] 112 __init__.py - INFO - 'check_future_dates' completed in 0.0117 sec
+[2025-06-20 14:32:12,256] 113 __init__.py - INFO - Memory used: 3.80 KB (peak: 15.04 KB)
+[2025-06-20 14:32:12,256] 157 Data_Validation.py - INFO - Data validation successful. Rows checked: 1155
+[2025-06-20 14:32:12,258] 112 __init__.py - INFO - 'run_all_checks' completed in 0.0742 sec
+[2025-06-20 14:32:12,258] 113 __init__.py - INFO - Memory used: 0.00 KB (peak: 0.00 KB)
+[2025-06-20 14:32:12,259] 171 Data_Validation.py - INFO -  Data Validation pipeline sucessfully executed
+[2025-06-20 14:32:12,259] 173 Data_Preprocessing.py - INFO - Starting Data Preprocessing pipeline
+[2025-06-20 14:32:12,259] 101 __init__.py - INFO - Running 'fetch_df'...
+[2025-06-20 14:32:12,259] 101 __init__.py - INFO - Running 'connect'...
+[2025-06-20 14:32:12,261] 112 __init__.py - INFO - 'connect' completed in 0.0000 sec
+[2025-06-20 14:32:12,261] 113 __init__.py - INFO - Memory used: 1.07 KB (peak: 2.87 KB)
+[2025-06-20 14:32:12,269] 112 __init__.py - INFO - 'fetch_df' completed in 0.0099 sec
+[2025-06-20 14:32:12,269] 113 __init__.py - INFO - Memory used: 0.00 KB (peak: 0.00 KB)
+[2025-06-20 14:32:12,269] 101 __init__.py - INFO - Running 'data_preprocessing_steps'...
+[2025-06-20 14:32:12,273] 101 __init__.py - INFO - Running 'apply'...
+[2025-06-20 14:32:12,281] 44 Data_Preprocessing.py - INFO - Removed 0 duplicate rows.
+[2025-06-20 14:32:12,281] 112 __init__.py - INFO - 'apply' completed in 0.0061 sec
+[2025-06-20 14:32:12,285] 113 __init__.py - INFO - Memory used: 230.54 KB (peak: 345.73 KB)
+[2025-06-20 14:32:12,285] 101 __init__.py - INFO - Running 'apply'...
+[2025-06-20 14:32:12,285] 112 __init__.py - INFO - 'apply' completed in 0.0000 sec
+[2025-06-20 14:32:12,285] 113 __init__.py - INFO - Memory used: 11.61 KB (peak: 23.47 KB)
+[2025-06-20 14:32:12,285] 101 __init__.py - INFO - Running 'apply'...
+[2025-06-20 14:32:12,327] 77 Data_Preprocessing.py - INFO - Applied missing value imputation using method: KNNImputer
+[2025-06-20 14:32:12,327] 112 __init__.py - INFO - 'apply' completed in 0.0419 sec
+[2025-06-20 14:32:12,327] 113 __init__.py - INFO - Memory used: 311.49 KB (peak: 789.82 KB)
+[2025-06-20 14:32:12,327] 101 __init__.py - INFO - Running 'apply'...
+[2025-06-20 14:32:12,461] 99 Data_Preprocessing.py - INFO - Outlier transformation applied using method: yeo on columns: ['crude_oil', 'gold', 'vix']
+[2025-06-20 14:32:12,461] 112 __init__.py - INFO - 'apply' completed in 0.1337 sec
+[2025-06-20 14:32:12,461] 113 __init__.py - INFO - Memory used: 192.77 KB (peak: 381.79 KB)
+[2025-06-20 14:32:12,461] 101 __init__.py - INFO - Running 'apply'...
+[2025-06-20 14:32:12,474] 120 Data_Preprocessing.py - INFO - Added percentage change column 'mean_sentiment_score_pct_chg'
+[2025-06-20 14:32:12,476] 120 Data_Preprocessing.py - INFO - Added percentage change column 'nasdaq_pct_chg'
+[2025-06-20 14:32:12,481] 120 Data_Preprocessing.py - INFO - Added percentage change column 'sp500_pct_chg'
+[2025-06-20 14:32:12,490] 120 Data_Preprocessing.py - INFO - Added percentage change column 'dj30_pct_chg'
+[2025-06-20 14:32:12,496] 120 Data_Preprocessing.py - INFO - Added percentage change column 'crude_oil_pct_chg'
+[2025-06-20 14:32:12,498] 120 Data_Preprocessing.py - INFO - Added percentage change column 'gold_pct_chg'
+[2025-06-20 14:32:12,498] 120 Data_Preprocessing.py - INFO - Added percentage change column 'usd_inr_pct_chg'
+[2025-06-20 14:32:12,508] 120 Data_Preprocessing.py - INFO - Added percentage change column '10yb_pct_chg'
+[2025-06-20 14:32:12,513] 120 Data_Preprocessing.py - INFO - Added percentage change column 'vix_pct_chg'
+[2025-06-20 14:32:12,516] 120 Data_Preprocessing.py - INFO - Added percentage change column 'nsebank_pct_chg'
+[2025-06-20 14:32:12,521] 120 Data_Preprocessing.py - INFO - Added percentage change column 'nsei_pct_chg'
+[2025-06-20 14:32:12,529] 125 Data_Preprocessing.py - INFO - Shifted column 'nsei' to create 'target'
+[2025-06-20 14:32:12,529] 112 __init__.py - INFO - 'apply' completed in 0.0681 sec
+[2025-06-20 14:32:12,529] 113 __init__.py - INFO - Memory used: 408.91 KB (peak: 437.41 KB)
+[2025-06-20 14:32:12,535] 147 Data_Preprocessing.py - INFO - Preprocessing pipeline completed successfully.
+[2025-06-20 14:32:12,535] 112 __init__.py - INFO - 'data_preprocessing_steps' completed in 0.2623 sec
+[2025-06-20 14:32:12,535] 113 __init__.py - INFO - Memory used: 0.00 KB (peak: 0.00 KB)
+[2025-06-20 14:32:12,587] 179 Data_Preprocessing.py - INFO -  Data Preprocessing pipeline sucessfully executed
+[2025-06-20 14:32:12,592] 175 Model_Tune_Evaluate.py - INFO - Starting Model Selection and Tuning...
+[2025-06-20 14:32:12,662] 101 __init__.py - INFO - Running 'apply'...
+[2025-06-20 14:32:12,726] 85 feature_splitting_scaling.py - INFO - Successfully applied scaling and data splitting.
+[2025-06-20 14:32:12,733] 112 __init__.py - INFO - 'apply' completed in 0.0716 sec
+[2025-06-20 14:32:12,733] 113 __init__.py - INFO - Memory used: 514.77 KB (peak: 757.31 KB)
+[2025-06-20 14:32:12,733] 101 __init__.py - INFO - Running 'run_grid_search'...
+[2025-06-20 14:32:12,752] 80 Model_Tune_Evaluate.py - INFO - Grid searching: lasso
+[2025-06-20 14:32:12,861] 106 Model_Tune_Evaluate.py - INFO - Best params for lasso: {'alpha': 0.1, 'max_iter': 1000}
+[2025-06-20 14:32:12,928] 80 Model_Tune_Evaluate.py - INFO - Grid searching: ridge
+[2025-06-20 14:32:13,015] 106 Model_Tune_Evaluate.py - INFO - Best params for ridge: {'alpha': 0.1, 'solver': 'auto'}
+[2025-06-20 14:32:13,045] 80 Model_Tune_Evaluate.py - INFO - Grid searching: xgboost
+[2025-06-20 14:33:21,815] 106 Model_Tune_Evaluate.py - INFO - Best params for xgboost: {'n_estimators': 200, 'max_depth': 3, 'learning_rate': 0.1, 'subsample': 1.0, 'colsample_bytree': 1.0, 'gamma': 0, 'reg_alpha': 0.1, 'reg_lambda': 1.5}
+[2025-06-20 14:33:22,020] 78 Model_Tune_Evaluate.py - INFO - Skipping lstm as it's not in the allowed list.
+[2025-06-20 14:33:22,023] 112 __init__.py - INFO - 'run_grid_search' completed in 69.2898 sec
+[2025-06-20 14:33:22,023] 113 __init__.py - INFO - Memory used: 665.19 KB (peak: 1169.48 KB)
+[2025-06-20 14:33:22,025] 101 __init__.py - INFO - Running 'save_results'...
+[2025-06-20 14:33:22,025] 159 Model_Tune_Evaluate.py - INFO - Best model: Lasso with params: {'alpha': 0.1, 'max_iter': 1000} and test Adjusted R²: 0.9222
+[2025-06-20 14:33:22,049] 112 __init__.py - INFO - 'save_results' completed in 0.0232 sec
+[2025-06-20 14:33:22,049] 113 __init__.py - INFO - Memory used: 33.81 KB (peak: 88.16 KB)
+[2025-06-20 14:33:22,049] 180 Model_Tune_Evaluate.py - INFO - Selected model tuning completed successfully.
+[2025-06-20 14:33:22,049] 26 main.py - INFO - End to End ML pipeline execution completed successfully...
+[2025-06-20 14:33:22,051] 112 __init__.py - INFO - 'execute_pipeline' completed in 1156.1596 sec
+[2025-06-20 14:33:22,051] 113 __init__.py - INFO - Memory used: 0.00 KB (peak: 0.00 KB)
+[2025-06-20 14:33:22,051] 37 main.py - INFO -  End to End ML pipeline execution completed successfully...

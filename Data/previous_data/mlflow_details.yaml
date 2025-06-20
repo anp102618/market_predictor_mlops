@@ -2,35 +2,33 @@ best_params:
   alpha: 0.1
   max_iter: 1000
 mlflow_run:
-  artifact_uri: mlflow-artifacts:/230066093542262320/67d8f31c17634ebd9066b252bd61ed8b/artifacts
-  current_stage: Staging
+  artifact_uri: file:///D:/market_predictor_mlops/mlruns/295941836308463394/7c984a0fcc054ad288dcd53edbbbcc24/artifacts
   end_time: null
-  experiment_id: '230066093542262320'
-  experiment_name: Experiment_Lasso_20250612_233253
-  last_row_prediction: 25210.734384456344
-  model_uri: runs:/67d8f31c17634ebd9066b252bd61ed8b/Lasso
-  model_version: '2'
-  run_id: 67d8f31c17634ebd9066b252bd61ed8b
-  run_name: Lasso_20250612_2332
-  start_time: 1749751374656
+  experiment_id: '295941836308463394'
+  experiment_name: market-predictor-ml
+  last_row_prediction: 25003.914065991274
+  model_uri: runs:/7c984a0fcc054ad288dcd53edbbbcc24/model
+  run_id: 7c984a0fcc054ad288dcd53edbbbcc24
+  run_name: Lasso_20250613_2209
+  start_time: 1749832766501
   status: RUNNING
-  tracking_uri: http://127.0.0.1:5000
+  tracking_uri: null
 model: Lasso
-saved_model_path: D:\Stock_Prediction\Tuned_Model\model.joblib
+saved_model_path: D:\market_predictor_mlops\Tuned_Model\model.joblib
 scores:
   test:
-    adjusted_r2: 0.9233814096659101
-    mae: 170.36913849103897
-    r2: 0.9307421476019362
-    rmse: 226.9920598936204
+    adjusted_r2: 0.9230313940042492
+    mae: 171.00275016165725
+    r2: 0.9303936084907992
+    rmse: 227.40887796585537
   train:
-    adjusted_r2: 0.9936853050106128
-    mae: 107.59141486092739
-    r2: 0.9938872283969014
-    rmse: 149.4015036261699
+    adjusted_r2: 0.9936856919506384
+    mae: 107.5761650275915
+    r2: 0.9938876029638447
+    rmse: 149.3969261836058
   val:
-    adjusted_r2: 0.9814105467825144
-    mae: 114.68941453420851
-    r2: 0.9831964331178187
-    rmse: 175.31428574586735
-timestamp: '20250612_2332'
+    adjusted_r2: 0.981423696610489
+    mae: 114.57136210054637
+    r2: 0.9832083196435425
+    rmse: 175.25226776967716
+timestamp: '20250613_2209'
