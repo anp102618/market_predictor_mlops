@@ -23,6 +23,11 @@ from Common_Utils import (
 from Model_Utils.time_series_models import time_series_forecasts, add_average_to_yaml
 
 # ------------------ Setup ------------------
+
+os.environ["MLFLOW_TRACKING_USERNAME"] = os.getenv("DAGSHUB_USERNAME")
+os.environ["MLFLOW_TRACKING_PASSWORD"] = os.getenv("DAGSHUB_TOKEN")
+MLFLOW_TRACKING_URI = "https://dagshub.com/anp102618/llm_nlp_tasks_mlops.mlflow"
+
 logger = setup_logger(filename="logs")
 config = load_yaml("Config_Yaml/model_config.yaml")
 
@@ -65,9 +70,9 @@ def execute_mlflow_steps() -> None:
     Includes model selection, training, evaluation, logging, and metadata saving.
     """
     try:
-        # mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
-        mlflow.set_tracking_uri("http://127.0.0.1:5000")
-        logger.info(f"MLflow tracking URI set to: http://127.0.0.1:5000")
+        mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
+        
+        logger.info(f"MLflow tracking URI set to:{MLFLOW_TRACKING_URI}")
 
         config_model = load_yaml(tuned_model_yaml)
         first_key = next(iter(config_model))
@@ -142,7 +147,7 @@ def execute_mlflow_steps() -> None:
                     "start_time": run.info.start_time,
                     "end_time": run.info.end_time,
                     "last_row_prediction": last_row_pred,
-                    "tracking_uri": "http://127.0.0.1:5000"
+                    "tracking_uri": MLFLOW_TRACKING_URI,
                 },
                 "saved_model_path": str(model_path.resolve())
             }
