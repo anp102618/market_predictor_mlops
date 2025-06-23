@@ -26,7 +26,7 @@ from Model_Utils.time_series_models import time_series_forecasts, add_average_to
 
 os.environ["MLFLOW_TRACKING_USERNAME"] = os.getenv("DAGSHUB_USERNAME")
 os.environ["MLFLOW_TRACKING_PASSWORD"] = os.getenv("DAGSHUB_TOKEN")
-MLFLOW_TRACKING_URI = "https://dagshub.com/anp102618/llm_nlp_tasks_mlops.mlflow"
+MLFLOW_TRACKING_URI = "https://dagshub.com/anp102618/market_predictor_mlops.mlflow"
 
 logger = setup_logger(filename="logs")
 config = load_yaml("Config_Yaml/model_config.yaml")
