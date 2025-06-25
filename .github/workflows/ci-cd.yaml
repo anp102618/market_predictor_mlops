@@ -63,7 +63,7 @@ jobs:
         run: |
           git config --global user.name "anp102618"
           git config --global user.email "a.n.prasad155@gmail.com"
-           git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}
+          
 
       - name: Configure DVC Remote
         run: |
