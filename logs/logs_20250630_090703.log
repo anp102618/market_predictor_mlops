@@ -1,0 +1,9 @@
+[2025-06-30 09:07:06,916] 91 __init__.py - CRITICAL - Unhandled Exception
+Traceback (most recent call last):
+  File "D:\market_predictor_mlops\src\Experiment_Tracking_Prediction.py", line 27, in <module>
+    os.environ["MLFLOW_TRACKING_USERNAME"] = os.getenv("DAGSHUB_USERNAME")
+  File "C:\Users\prasa\anaconda3\envs\mp-env\lib\os.py", line 685, in __setitem__
+    value = self.encodevalue(value)
+  File "C:\Users\prasa\anaconda3\envs\mp-env\lib\os.py", line 743, in check_str
+    raise TypeError("str expected, not %s" % type(value).__name__)
+TypeError: str expected, not NoneType
