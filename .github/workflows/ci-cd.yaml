@@ -83,14 +83,14 @@ jobs:
 
       - name: Add Files to DVC
         run: |
-          dvc add Data/processed_data/final_data.csv
-          dvc add Tuned_Model/model.joblib
-          dvc add Tuned_Model/mlflow_details.yaml
-          dvc add Tuned_Model/time_series_predictions.yaml
+          dvc add Data/new_data/final_data.csv
+          dvc add Data/new_data/model.joblib
+          dvc add Data/new_data/mlflow_details.yaml
+          dvc add Data/new_data/time_series_predictions.yaml
 
       - name: Git Add & Commit DVC Files
         run: |
-          git add Data/processed_data/*.dvc Tuned_Model/*.dvc .gitignore
+          git add Data/new_data/*.dvc .gitignore
           git commit -m "Auto: Track data/model artifacts with DVC" || echo "Nothing to commit"
           git push origin main
 
