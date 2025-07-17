@@ -54,10 +54,10 @@ jobs:
 
       - name: Delink Artifacts from Git (for DVC tracking)
         run: |
-          git rm --cached Data/processed_data/final_data.csv || true
-          git rm --cached Tuned_Model/model.joblib || true
-          git rm --cached Tuned_Model/mlflow_details.yaml || true
-          git rm --cached Tuned_Model/time_series_predictions.yaml || true
+          git rm --cached Data/new_data/final_data.csv || true
+          git rm --cached Data/new_data/model.joblib || true
+          git rm --cached Data/new_data/mlflow_details.yaml || true
+          git rm --cached Data/new_data/time_series_predictions.yaml || true
 
       - name: Configure Git
         run: |
