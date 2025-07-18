@@ -14,89 +14,99 @@ env:
   DAGSHUB_TOKEN: ${{ secrets.DAGSHUB_TOKEN }}
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-  GH_PAT: ${{ secrets.GH_PAT }}
   GH_TOKEN: ${{ secrets.GH_TOKEN }}
   MLFLOW_TRACKING_URI: https://dagshub.com/${{ secrets.DAGSHUB_USERNAME }}/market_predictor_mlops.mlflow
 
 jobs:
-  build-train-test-deploy:
+  train-test-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GH_TOKEN }}
+    - name: Checkout Code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GH_TOKEN }}
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.10"
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.10"
 
-      - name: Install Dependencies
-        run: |
-          pip install --upgrade pip
-          pip install -r app_requirements.txt
-          pip install -r requirements.txt || true
+    - name: Install Dependencies
+      run: |
+        pip install --upgrade pip
+        pip install -r app_requirements.txt
+        pip install -r requirements.txt || true
+        pip install dvc[http]  # adjust to [s3], [gs], etc. based on your remote
 
-      - name: Configure Git
-        run: |
-          git config --global user.name "anp102618"
-          git config --global user.email "a.n.prasad155@gmail.com"
+    - name: Configure Git Identity
+      run: |
+        git config --global user.name "anp102618"
+        git config --global user.email "a.n.prasad155@gmail.com"
 
-      - name: Set Up DVC and Remote
-        run: |
-          pip install dvc[http]  # or dvc[s3], dvc[gs], etc., based on your remote
-          dvc remote add -f -d origin_remote https://dagshub.com/${DAGSHUB_USERNAME}/market_predictor_mlops.dvc || true
-          dvc remote modify origin_remote auth basic
-          dvc remote modify --local origin_remote user ${DAGSHUB_USERNAME}
-          dvc remote modify --local origin_remote password ${DAGSHUB_TOKEN}
-          dvc config core.autostage true
+    - name: Configure DVC Remote
+      run: |
+        dvc remote add -f -d origin_remote https://dagshub.com/${DAGSHUB_USERNAME}/market_predictor_mlops.dvc || true
+        dvc remote modify origin_remote auth basic
+        dvc remote modify --local origin_remote user ${DAGSHUB_USERNAME}
+        dvc remote modify --local origin_remote password ${DAGSHUB_TOKEN}
+        dvc config core.autostage true
 
-      - name: Run Training Script
-        run: python main.py
+    - name: Pull Required Data Artifacts
+      run: |
+        dvc pull || echo "No remote data found yet. Will create fresh outputs."
+        ls -lh Data/new_data || echo "Directory missing, fresh run expected."
 
-      - name: Track Experiment in MLflow
-        run: python src/Experiment_Tracking_Prediction.py
+    - name: Run Training Pipeline
+      run: python main.py
 
-      - name: Delink & Add Files to DVC
-        run: |
-          for file in Data/new_data/final_data.csv Data/new_data/model.joblib Data/new_data/mlflow_details.yaml Data/new_data/time_series_predictions.yaml; do
-            git rm --cached "$file" || true
-            dvc add "$file"
-          done
+    - name: Track Experiment in MLflow
+      run: python src/Experiment_Tracking_Prediction.py
 
-      - name: Commit DVC Changes
-        run: |
-          git add Data/new_data/*.dvc .gitignore
-          git commit -m "Auto: Track model artifacts via DVC" || echo "Nothing to commit"
-          git push origin main
+    - name: DVC Track Output Files (if exist)
+      run: |
+        mkdir -p Data/new_data
+        for file in final_data.csv model.joblib mlflow_details.yaml time_series_predictions.yaml; do
+          fpath="Data/new_data/$file"
+          if [ -f "$fpath" ]; then
+            echo "Tracking $fpath with DVC..."
+            git rm --cached "$fpath" || true
+            dvc add "$fpath"
+          else
+            echo "File $fpath not found. Skipping..."
+          fi
+        done
 
-      - name: DVC Push Artifacts
-        run: dvc push
+    - name: Commit DVC Files to Git
+      run: |
+        git add Data/new_data/*.dvc .gitignore || true
+        git commit -m "Auto: Track artifacts with DVC" || echo "Nothing to commit"
+        git push origin main
 
-      - name: Pull DVC Artifacts (simulate cron fresh env)
-        run: |
-          rm -f Data/new_data/*.csv Data/new_data/*.yaml Data/new_data/*.joblib
-          dvc pull
+    - name: Push Artifacts to DVC Remote
+      run: dvc push
 
-      - name: Run Model Promotion Tests
-        run: python -m unittest Test_Script/test_model_promotion.py
+    - name: Re-pull Artifacts for Testing
+      run: |
+        dvc pull
+        ls -lh Data/new_data
 
-      - name: Generate Timestamp Tag
-        id: timestamp
-        run: echo "TAG=$(date +'%Y%m%d%H%M%S')" >> "$GITHUB_OUTPUT"
+    - name: Run Promotion Unit Tests
+      run: python -m unittest Test_Script/test_model_promotion.py
 
-      - name: Log in to DockerHub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ env.DOCKERHUB_USERNAME }}
-          password: ${{ env.DOCKERHUB_TOKEN }}
+    - name: Generate Docker Tag
+      id: timestamp
+      run: echo "TAG=$(date +'%Y%m%d%H%M%S')" >> "$GITHUB_OUTPUT"
 
-      - name: Build & Push Docker Image
-        run: |
-          TAG=${{ steps.timestamp.outputs.TAG }}
-          IMAGE_NAME=${{ env.DOCKERHUB_USERNAME }}/market_prediction_app:$TAG
-          echo "IMAGE_NAME=$IMAGE_NAME" >> "$GITHUB_OUTPUT"
-          docker build -t $IMAGE_NAME .
-          docker push $IMAGE_NAME
+    - name: Login to DockerHub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ env.DOCKERHUB_USERNAME }}
+        password: ${{ env.DOCKERHUB_TOKEN }}
+
+    - name: Build and Push Docker Image
+      run: |
+        TAG=${{ steps.timestamp.outputs.TAG }}
+        IMAGE_NAME=${{ env.DOCKERHUB_USERNAME }}/market_prediction_app:$TAG
+        docker build -t $IMAGE_NAME .
+        docker push $IMAGE_NAME
