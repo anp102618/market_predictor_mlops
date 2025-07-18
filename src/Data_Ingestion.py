@@ -476,6 +476,7 @@ def align_sentiment_with_price(table_name1:str = ticker_data_table, table_name2:
         logger.info("Sentiment alignment completed successfully.")
 
         final_df.to_csv(final_data_csv)
+        os.makedirs(os.path.dirname(file_data_new), exist_ok=True)
         final_df.to_csv(final_data_new)
         logger.info("Successfully updated ticker_data.csv with new stock data.")
         
