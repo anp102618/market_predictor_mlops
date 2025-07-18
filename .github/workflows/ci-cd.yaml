@@ -19,14 +19,8 @@ env:
   MLFLOW_TRACKING_URI: https://dagshub.com/${{ secrets.DAGSHUB_USERNAME }}/market_predictor_mlops.mlflow
 
 jobs:
-
-  ######################################
-  # 1. Train, Track, Test , deploy the Model
-  ######################################
   build-train-test-deploy:
     runs-on: ubuntu-latest
-    outputs:
-      promotion_status: ${{ steps.promotion.outputs.status }}
 
     steps:
       - name: Checkout Code
@@ -43,72 +37,55 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install -r app_requirements.txt
-          pip install -r requirements.txt || true  # in case some extras overlap
-
-      - name: Run Model Training
-        run: python main.py
-
-      - name: Track MLflow Experiment on DagsHub
-        run: python src/Experiment_Tracking_Prediction.py
-        
-
-      - name: Delink Artifacts from Git (for DVC tracking)
-        run: |
-          git rm --cached Data/new_data/final_data.csv || true
-          git rm --cached Data/new_data/model.joblib || true
-          git rm --cached Data/new_data/mlflow_details.yaml || true
-          git rm --cached Data/new_data/time_series_predictions.yaml || true
+          pip install -r requirements.txt || true
 
       - name: Configure Git
         run: |
           git config --global user.name "anp102618"
           git config --global user.email "a.n.prasad155@gmail.com"
-          
 
-      - name: Configure DVC Remote
+      - name: Set Up DVC and Remote
         run: |
-          dvc remote add -d -f origin_remote https://dagshub.com/${DAGSHUB_USERNAME}/market_predictor_mlops.dvc
+          pip install dvc[http]  # or dvc[s3], dvc[gs], etc., based on your remote
+          dvc remote add -f -d origin_remote https://dagshub.com/${DAGSHUB_USERNAME}/market_predictor_mlops.dvc || true
           dvc remote modify origin_remote auth basic
           dvc remote modify --local origin_remote user ${DAGSHUB_USERNAME}
           dvc remote modify --local origin_remote password ${DAGSHUB_TOKEN}
-          
-      - name: Debug DVC remote config
-        run: |
-          cat .dvc/config
-          dvc remote list --verbose
-
-      - name: Enable DVC Auto-Staging
-        run: |
           dvc config core.autostage true
 
-      - name: Add Files to DVC
-        run: |
-          dvc add Data/new_data/final_data.csv
-          dvc add Data/new_data/model.joblib
-          dvc add Data/new_data/mlflow_details.yaml
-          dvc add Data/new_data/time_series_predictions.yaml
+      - name: Run Training Script
+        run: python main.py
 
-      - name: Git Add & Commit DVC Files
+      - name: Track Experiment in MLflow
+        run: python src/Experiment_Tracking_Prediction.py
+
+      - name: Delink & Add Files to DVC
+        run: |
+          for file in Data/new_data/final_data.csv Data/new_data/model.joblib Data/new_data/mlflow_details.yaml Data/new_data/time_series_predictions.yaml; do
+            git rm --cached "$file" || true
+            dvc add "$file"
+          done
+
+      - name: Commit DVC Changes
         run: |
           git add Data/new_data/*.dvc .gitignore
-          git commit -m "Auto: Track data/model artifacts with DVC" || echo "Nothing to commit"
+          git commit -m "Auto: Track model artifacts via DVC" || echo "Nothing to commit"
           git push origin main
 
-      - name: DVC Push
-        run: |
-          dvc push
+      - name: DVC Push Artifacts
+        run: dvc push
 
-      - name: Pull Artifacts for Testing
+      - name: Pull DVC Artifacts (simulate cron fresh env)
         run: |
+          rm -f Data/new_data/*.csv Data/new_data/*.yaml Data/new_data/*.joblib
           dvc pull
 
-      - name: Run Model Promotion Test
+      - name: Run Model Promotion Tests
         run: python -m unittest Test_Script/test_model_promotion.py
 
-      - name: Set Timestamp Tag
+      - name: Generate Timestamp Tag
         id: timestamp
         run: echo "TAG=$(date +'%Y%m%d%H%M%S')" >> "$GITHUB_OUTPUT"
-
 
       - name: Log in to DockerHub
         uses: docker/login-action@v3
@@ -116,14 +93,10 @@ jobs:
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ env.DOCKERHUB_TOKEN }}
 
-      - name: Build and Push Docker Image
-        id: docker
+      - name: Build & Push Docker Image
         run: |
           TAG=${{ steps.timestamp.outputs.TAG }}
           IMAGE_NAME=${{ env.DOCKERHUB_USERNAME }}/market_prediction_app:$TAG
-          echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_OUTPUT
-
+          echo "IMAGE_NAME=$IMAGE_NAME" >> "$GITHUB_OUTPUT"
           docker build -t $IMAGE_NAME .
           docker push $IMAGE_NAME
-
-      
