@@ -1,5 +1,5 @@
 outs:
-- md5: 63d089a477ec6c7c3135304fee176455
-  size: 134
+- md5: de15cadc8dd59d1c2b1b890aade3773b
+  size: 132
   hash: md5
   path: time_series_predictions.yaml
