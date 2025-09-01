@@ -15,7 +15,7 @@ Data_Ingestion:
   const:
     base_url: "https://in.investing.com/indices/s-p-cnx-nifty-news/"
     links_xpath: "//ul[@data-test='news-list']//article[@data-test='article-item']//div[@class='relative']//a"
-    article_xpath: "//*[@id='article'][@class='article_container']//p"
+    article_xpath: "//*[@id='article']//p"
     date_xpath: "//span[contains(text(),'Published')]"
     table_xpath: "//div[@class='container' and @data-testid='history-table']//table"
 
