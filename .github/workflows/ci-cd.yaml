@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [main]
   schedule:
-    - ##cron: "30 2 * * *"  # Daily at 8:00 AM IST
+    - cron: "30 2 * * *"  # Daily at 8:00 AM IST
   workflow_dispatch:
 
 env:
@@ -50,7 +50,7 @@ jobs:
         dvc remote modify origin_remote auth basic
         dvc remote modify --local origin_remote user ${DAGSHUB_USERNAME}
         dvc remote modify --local origin_remote password ${DAGSHUB_TOKEN}
-        # dvc config core.autostage true
+        dvc config core.autostage true
 
     - name: Pull Required Data Artifacts
       run: |
