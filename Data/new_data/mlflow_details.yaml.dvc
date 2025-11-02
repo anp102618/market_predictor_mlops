@@ -1,5 +1,5 @@
 outs:
-- md5: c7e805eaac6d2f4f1d913f6947f7c6da
-  size: 1077
+- md5: 68ccdc610cd1d028a4021a03a3f3fafa
+  size: 1078
   hash: md5
   path: mlflow_details.yaml
